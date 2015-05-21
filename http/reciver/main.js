@@ -6,6 +6,11 @@ var app = {
 	},
 	reciver: function(data) {
 		var li = $("#" + data.id);
+		if (data.type == "disconnect" && li[0]) {
+			li = li[0];
+			li.parentNode.removeChild(li);
+			return false;
+		}
 		if (li.length > 0) {
 			app.list.appendChild(app.format(data, li[0]));
 

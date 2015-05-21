@@ -10,29 +10,19 @@ var websocket = {
 		init: function() {
 			websocket.io.sockets.on('connection', function(socket) {
 
-				var re = new RegExp("id=");
-				console.log(socket.handshake.headers.cookie)
-				if (!re.test(socket.handshake.headers.cookie)) {
-					console.log("initial Connect");
-					socket.emit('setId', {
-						cookie: socket.id
-					});
-				} else {
-					console.log("reconnect");
-					var id = socket.handshake.headers.cookie.match(/id=([a-z A-Z 0-9 \-\_]*)/);
-					console.log(id[1]);
-					if (id === null) {
-						id = socket.handshake.headers.cookie.match(/id=(.*)/);
-					}
-					socket.id = id[1];
-				}
-
 				socket.on('data', function(data) {
-					// console.log("\n\n");
 					data.id = socket.id;
 					console.log(data);
 
 					websocket.io.emit("reciver", data);
+				})
+
+				socket.on("disconnect", function(data) {
+					console.log("disconnect " + socket.id);
+					websocket.io.emit("reciver", {
+						type: "disconnect",
+						id: socket.id
+					})
 				})
 			});
 		}
