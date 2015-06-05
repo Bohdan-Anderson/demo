@@ -18,7 +18,7 @@ var app = {
 
 		app.but.init();
 
-		setInterval(app.highlightRandom, app.v.freq);
+		app.beat = setInterval(app.highlightRandom, app.v.freq);
 	},
 
 	highlightRandom: function() {
@@ -85,8 +85,14 @@ var app = {
 		init: function() {
 			console.log("nav init")
 			$("#grey").click(app.nav.grey);
+			// $("#countchange").val(app.v.count)
+			$("#countchange").change(app.nav.countchange);
+			$("#freqchange").change(app.nav.freqchange);
+			$("#fadechange").change(app.nav.fadechange);
+			app.hash.init();
 			$("#countchange").val(app.v.count)
-			$("#countchange").click(app.nav.countchange);
+			$("#freqchange").val(app.v.freq)
+			$("#fadechange").val(app.v.fade)
 		},
 		grey: function(event) {
 			event.preventDefault();
@@ -96,7 +102,6 @@ var app = {
 		},
 		countchange: function() {
 			if (this.value > app.ca.length) {
-				console.log("add");
 				for (var a = app.ca.length; a < this.value; ++a) {
 					app.but.create({
 						id: a,
@@ -104,18 +109,46 @@ var app = {
 						type: "button-auto"
 					});
 				}
-				return false;
 			} else if (this.value < app.ca.length) {
-				console.log("remove");
 				for (var a = app.ca.length; a > this.value; --a) {
 					$("#" + (a - 1)).remove();
 				}
 				app.ca = $(".button-auto");
-				return false;
 			}
-			console.log("no action")
+			app.v.count = app.ca.length;
+			app.hash.update();
+		},
+		freqchange: function() {
+			app.v.freq = this.value;
+			clearInterval(app.beat)
+			app.beat = setInterval(app.highlightRandom, app.v.freq);
+			app.hash.update();
+		},
+		fadechange: function() {
+			app.v.fade = this.value;
+			app.hash.update();
 		}
-
+	},
+	hash: {
+		init: function() {
+			var h = window.location.hash.split("#").pop().split("&");
+			for (var a = 0; a < h.length; ++a) {
+				var c = h[a].split("=")
+				app.v[c[0]] = parseInt(c[1])
+			}
+		},
+		update: function() {
+			var out = "";
+			for (el in app.v) {
+				if (app.v[el]) {
+					if (out.length) {
+						out += "&";
+					}
+					out += el + "=" + app.v[el];
+				}
+			}
+			window.location.hash = out;
+		}
 	},
 	reciver: function(data) {
 		var li = $("#" + data.id);
