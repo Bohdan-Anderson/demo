@@ -26,10 +26,10 @@ var app = {
 			}
 			return "";
 		}
-	}
+	},
 
 	init: function() {
-		app.socket = io.connect("http://localhost:8000");
+		app.socket = io.connect(SETTINGS.ip);
 		app.id.init();
 		$("#button").click(app.clickButton);
 	},
@@ -37,7 +37,8 @@ var app = {
 	clickButton: function(event) {
 		app.socket.emit("data", {
 			"type": "button",
-			"test": "data"
+			"test": "data",
+			"time": new Date().getTime()
 		})
 	}
 }

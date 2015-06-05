@@ -1,6 +1,6 @@
 var app = {
 	init: function() {
-		app.socket = io.connect("http://localhost:8000");
+		app.socket = io.connect(SETTINGS.ip);
 		app.socket.on("reciver", app.reciver);
 		app.list = $("#list")[0];
 	},
@@ -20,7 +20,6 @@ var app = {
 	},
 	format: function(data, liElement) {
 		if (liElement) {
-			console.log(liElement)
 			app.list.removeChild(liElement);
 		}
 		var li = document.createElement("li");

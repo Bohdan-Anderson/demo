@@ -2,6 +2,12 @@ html,body{
 	padding: 0;
 	margin: 0;
 	font-family: sans-serif;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #wrapper{
@@ -17,17 +23,12 @@ ul,li{
 	margin: 0;
 	display: inline-block;
 }
-ul{
-	width: 24%;
+
+p{
+	margin: 0;
+	padding: 0;
 }
 
-li{
-	span{
-		display: block;
-	}
-}
 
-.active{
-	background-color: #000;
-	color: #fff;
-}
+@import "index";
+@import "reciver";

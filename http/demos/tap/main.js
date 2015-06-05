@@ -1,6 +1,6 @@
 var app = {
 	init: function() {
-		app.socket = io.connect("http://192.168.17.10:8000");
+		app.socket = io.connect(SETTINGS.ip);
 		app.previous = new Date();
 		// window.addEventListener("deviceorientation", app.onOrientaionEvent, true);
 		window.addEventListener("devicemotion", app.onMotionEvent, true);

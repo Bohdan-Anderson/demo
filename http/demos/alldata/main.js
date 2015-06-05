@@ -8,11 +8,11 @@ var app = {
 
 	init: function() {
 		console.log("starting");
-		app.socket = io.connect("http://192.168.17.10:8000");
+		app.socket = io.connect(SETTINGS.ip);
 		window.addEventListener("deviceorientation", app.onOrientaionEvent, true);
 		window.addEventListener("orientationchange", app.orientation, false);
 		window.addEventListener('devicemotion', app.devicemotion, false);
-		setInterval(app.beat, 1000);
+		setInterval(app.beat, 500);
 	},
 
 	beat: function(event) {

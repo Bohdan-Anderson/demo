@@ -12,18 +12,68 @@
 	<link rel="stylesheet" href="/assets/css/style.min.css"/>
 	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
 </head>
-<body>
-<h1>Demo</h1>
-<ul>
-	<li><a href="/demos/button">button</a></li>
-	<li><a href="/demos/tap">tap</a></li>
-	<li><a href="/demos/shake">shake</a></li>
-	<li><a href="/demos/alldata">alldata</a></li>
-	<li><a href="/demos/sway">sway</a></li>
-</ul>
+<body class="home">
+	<div id="wrapper">
+		<h1>Demo</h1>
+		<ul class="mainlist">
+			<li>
+				<a href="/demos/button">button</a>
+				<p>
+					Button on the screen, which you touch, and a message is sent
+				</p>
+				<p class="outputs">
+					event<br>
+					time stamp
+				</p>
+			</li>
+			<li>
+				<a href="/demos/tap">tap</a>
+				<p>
+					When the phone's momentum come to a sudden stop/start it triggers this event
+				</p>
+				<p class="outputs">
+					event<br>
+					current average of movement on phone
+				</p>
+			</li>
+			<li>
+				<a href="/demos/shake">shake</a>
 
-<h2><a href="/reciver">Reciver</a></h2>
-<h2><a href="/recivergraph">Reciver Graph</a></h2>
+			</li>
+			<li>
+				<a href="/demos/alldata">alldata</a>
+				<p>
+					Every 200ms it sends an update of the phones status <br>
+					The data is basically the same for both of these inputs <br>
+					Devicemotion was only sending acceleration Including Gravity
+				</p>
+				<p class="outputs">
+					event<br>
+					orientation <br>
+					deviceorientation absolute <br>
+					deviceorientation gamma <br>
+					deviceorientation alpha <br>
+					deviceorientation beta <br>
+					devicemotion acceleration x,y,z <br>
+					devicemotion acceleration Including Gravity x,y,z <br>
+					devicemotion rotation x,y,z <br>
+					devicemotion interval <br>
+				</p>
+			</li>
+			<li>
+				<a href="/demos/sway">sway</a>
+			</li>
+		</ul>
 
+		<h2><a href="/reciver">Reciver</a></h2>
+		<h2><a href="/recivergraph">Reciver Graph</a></h2>
+
+		<div class="notes">
+			<ul>
+				<li><h2>notes</h2></li>
+				<li>Use non selectable text, make it when you thouch the screen by mistake better <a href="http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting"> link</a></li>
+			</ul>
+		</div>
+	</div>
 </body>
 </html>
