@@ -1,0 +1,12 @@
+.button #button {
+  width: 80%;
+  height: 40%;
+  margin: 0 auto;
+  display: block;
+  color: #000;
+  background-color: #fff; }
+  .button #button:active {
+    color: #fff;
+    background-color: #000; }
+
+/*# sourceMappingURL=demo.css.map */

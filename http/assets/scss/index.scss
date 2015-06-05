@@ -1,0 +1,56 @@
+.home{
+
+	.mainlist{
+		padding-top: 1em;
+		border-top: solid 1px black;
+		width: 50%;
+		min-width: 325px;
+		margin: 0 auto;
+		display: block;
+		li{
+			display: block;
+			span{
+				display: block;
+			}
+			border-bottom: solid 1px black;
+			margin-bottom: 1em;
+			a{
+				text-transform: uppercase;
+				font-size: 1.5em;
+			}
+			p{
+				padding-top: 0.5em;	
+			}
+			img{
+				max-width: 200px;
+			}			
+			.outputs{
+				font-size: 0.8em;
+
+			}
+		}
+	}
+
+	.active{
+		background-color: #000;
+		color: #fff;
+	}
+
+	.notes{
+		font-size: 0.8em;
+		text-align: center;
+		h2{
+			border-top: solid black 1px;
+			padding-top: 2em;
+			margin-top: 2em;
+		}
+		ul{
+			width: 100%;
+		}
+		li{
+			display: block;
+		}
+		padding-bottom: 100px;
+	}
+	
+}

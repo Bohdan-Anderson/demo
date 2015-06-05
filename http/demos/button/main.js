@@ -1,45 +1,18 @@
 var app = {
-	id: {
-		init: function() {
-			app.socket.on("setId", app.id.set)
-		},
-		set: function(msg) {
-			console.log(msg)
-			app.cookie.set("id", msg.cookie, 1);
-		}
-	},
-
-	cookie: {
-		set: function(cname, cvalue, exdays) {
-			var d = new Date();
-			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-			var expires = "expires=" + d.toUTCString();
-			document.cookie = cname + "=" + cvalue + "; " + expires;
-		},
-		get: function(cname) {
-			var name = cname + "=";
-			var ca = document.cookie.split(';');
-			for (var i = 0; i < ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') c = c.substring(1);
-				if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-			}
-			return "";
-		}
+	data: {
+		"type": "button"
 	},
 
 	init: function() {
 		app.socket = io.connect(SETTINGS.ip);
-		app.id.init();
 		$("#button").click(app.clickButton);
+		app.data.colour = [parseInt(Math.random() * 255), parseInt(Math.random() * 255), parseInt(Math.random() * 255)];
+		$("body").css("background-color", "rgb(" + app.data.colour[0] + "," + app.data.colour[1] + "," + app.data.colour[2] + ")");
 	},
 
 	clickButton: function(event) {
-		app.socket.emit("data", {
-			"type": "button",
-			"test": "data",
-			"time": new Date().getTime()
-		})
+		app.data.time = new Date().getTime()
+		app.socket.emit("data", app.data)
 	}
 }
 app.init();

@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Demos</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -14,16 +13,18 @@
 </head>
 <body class="home">
 	<div id="wrapper">
-		<h1>Demo</h1>
+		<h1>OUTPUTS</h1>
 		<ul class="mainlist">
 			<li>
 				<a href="/demos/button">button</a>
 				<p>
-					Button on the screen, which you touch, and a message is sent
+					Button on the screen, which you touch, and a message is sent <br>
+					need to add button down vs button up (maybe make this a new view)
 				</p>
 				<p class="outputs">
 					event<br>
-					time stamp
+					time stamp <br>
+					colour
 				</p>
 			</li>
 			<li>
@@ -37,8 +38,16 @@
 				</p>
 			</li>
 			<li>
-				<a href="/demos/shake">shake</a>
-
+				<a href="/demos/sway">sway</a>
+				<p>
+					constant feed of the user's sway percentage <br>
+					the max and min slowly come back to the users position again to give a dynamci sway <br>
+					this can be seen when the phone is left on the table, it will beggin to flip back and forth between black and white, max and min
+				</p>
+				<p class="outputs">
+					event<br>
+					current percentage of z axis
+				</p>
 			</li>
 			<li>
 				<a href="/demos/alldata">alldata</a>
@@ -47,6 +56,8 @@
 					The data is basically the same for both of these inputs <br>
 					Devicemotion was only sending acceleration Including Gravity
 				</p>
+				<img src="/assets/img/axes.png">
+
 				<p class="outputs">
 					event<br>
 					orientation <br>
@@ -60,13 +71,32 @@
 					devicemotion interval <br>
 				</p>
 			</li>
-			<li>
-				<a href="/demos/sway">sway</a>
-			</li>
 		</ul>
 
-		<h2><a href="/reciver">Reciver</a></h2>
-		<h2><a href="/recivergraph">Reciver Graph</a></h2>
+		<h1>INPUTS</h1>
+		<ul class="mainlist">
+			<li>
+				<a href="/recivers/findYourButton">Find your button</a>
+				<p>Find the button that you are pressing</p>
+				<p class="outputs">
+					Variable difficulties <br>
+					Colour is feed by the button <br>
+					Number of buttons
+				</p>
+			</li>
+			<li>
+				<a href="/recivers/reciver">Reciver</a>
+				<p>Any data feed to it, displays as a list each variable</p>
+				<p class="outputs">
+				</p>
+			</li>
+			<li>
+				<a href="/recivers/recivergraph">Reciver Graph</a>
+				<p>In Dev...</p>
+				<p class="outputs">
+				</p>
+			</li>
+		</ul>
 
 		<div class="notes">
 			<ul>

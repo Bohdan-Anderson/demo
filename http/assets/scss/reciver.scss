@@ -1,0 +1,55 @@
+.reciver{
+	ul{
+		width: 49%;
+	}
+	li{
+		span{
+			display: block;
+		}
+	}
+}
+.reciver-button{
+	li{
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin: 25px;
+	}
+	.highlight{
+		background-color: #000 !important;
+	}
+	.nav{
+		position: fixed;
+		width: 100%;
+		bottom: -100px;
+		text-align: center;
+		padding: 2em;
+		background-color: #ccc;
+		&:hover{
+			bottom: 0px;
+		}
+		left: 0;
+		> div{
+			position: relative;
+			width: 100%;
+		}
+		.icon{
+			position: absolute;
+			top: -40px;
+			left: 47.5%;
+			height: 40px;
+			width: 5%;
+			background-color: rgba(150,150,150,0.2);
+		}
+		&:hover .icon{
+			height: 0;
+		}
+	}
+	&.grey li{
+		background-color: #ccc !important;
+		&.highlight{
+			background-color: #000 !important;
+		}
+	}
+}
