@@ -9,7 +9,7 @@ var websocket = {
 	views: {
 		init: function() {
 			websocket.io.sockets.on('connection', function(socket) {
-
+				console.log("connected " + socket.id);
 				socket.on('data', function(data) {
 					data.id = socket.id;
 					console.log(data);
