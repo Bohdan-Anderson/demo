@@ -49,7 +49,7 @@
 					current percentage of z axis
 				</p>
 			</li>
-			<li>
+<!-- 			<li>
 				<a href="/demos/zero">zero</a>
 				<p>
 					constant feed of the user's rotation <br>
@@ -59,6 +59,16 @@
 				<p class="outputs">
 					event<br>
 					current rotaion from relative zero
+				</p>
+			</li> -->
+			<li>
+				<a href="/demos/newzero">New Zero</a>
+				<p>
+					Acts as the tare feature of a scale, setting all existing Alpha Beta Gamma values to 0. On movement all values are degrees from 0.
+				</p>
+				<p class="outputs">
+					<!-- event<br>
+					current rotaion from relative zero -->
 				</p>
 			</li>
 			<li>
@@ -102,10 +112,32 @@
 				<p class="outputs">
 				</p>
 			</li>
-			<li>
+<!-- 			<li>
 				<a href="/recivers/recivergraph">Reciver Graph</a>
 				<p>In Dev...</p>
 				<p class="outputs">
+				</p>
+			</li> -->
+<!-- 			<li>
+				<a href="/recivers/pairing">Pairing</a>
+				<p>In Dev...</p>
+				<p class="outputs">
+				</p>
+			</li> -->
+		</ul>
+
+		<h1>Pairings</h1>
+		<ul class="mainlist">
+			<li>
+				<a href="/demos/timepair">Time Pair</a>
+				<p>
+					First example of pairing via time, who ever taps closest in time to each other they get paired. The server set the time and socket into an array and then waits for the next call to pair it. <br>
+					Sends a message with data type <code>tap demo start pair</code>
+				</p>
+				<p class="outputs">
+					replies to the other devices and self on pairing with <code>tap demo paired</code>
+					<!-- event<br>
+					current rotaion from relative zero -->
 				</p>
 			</li>
 		</ul>
