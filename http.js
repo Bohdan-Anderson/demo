@@ -10,8 +10,8 @@ var http = {
 		http.server = http.http.createServer(http.app);
 	},
 	start: function() {
-		http.server.listen(80, "107.161.159.47"); //server
-		// http.server.listen(8000); //local
+		// http.server.listen(80, "107.161.159.47"); console.log("YOU GOT IT SET UP FOR THE SERVER!")//server
+		http.server.listen(8000); //local
 		console.log("http server starting on port 8000")
 	}
 }
