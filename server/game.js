@@ -6,14 +6,25 @@ var game = {
 	}
 }
 
+
+
+
+
+
+
 var time = {
-	point: [],
+	point: [], // data is store in there [[time,socket],[time,socket],[time,socket]]
 	time_size: 250,
 	checker_interval: 100,
 	init: function() {
 		game.io.sockets.on('connection', time.connect);
+		// the checker make a function that loops through the time.point
+		// if the element don't have the same socket id it pairs them.
+		// if the element has the same socket id, it removes it and adds an updated object
 		time.checker.init();
 	},
+	// when we get data of a certain type we test for pairs
+	// we test against the time.point array
 	connect: function(socket) {
 		socket.on('data', function(data) {
 			if (data.type == "tap demo start pair") {
@@ -35,6 +46,7 @@ var time = {
 			}
 		});
 	},
+
 	checker: {
 		looptarget: null,
 		init: function() {
