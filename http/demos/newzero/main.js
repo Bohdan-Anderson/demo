@@ -30,7 +30,6 @@ var app = {
 		app.data.zero.beta = app.data.beta;
 		app.data.zero.gamma = app.data.gamma;
 
-	
 		/*
 		app.socket.emit("data", "Deg Alpha: "+app.data.alpha+" = Units: "+(Math.sin(radAlpha)));
 		app.socket.emit("data", "Deg Beta: "+(app.mapRange(app.data.beta,-180,180,0,360))+" = Units: "+(Math.sin(radBeta)));
@@ -48,14 +47,18 @@ var app = {
 
 		radAlpha = (Math.PI/180) * app.data.alpha; //alpha: [0,360]
 		radAlphaZ = (Math.PI/180) * (app.data.zero.alpha-app.data.alpha); //alpha: [0,360]
+
 		radBeta = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
+		//radBetaZ = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
+
 		radGamma = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
+		//radGammaZ = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
 
 		app.data.alphaCurve = (Math.sin(radAlpha));
 		app.data.betaCurve = (Math.sin(radBeta));
 		app.data.gammaCurve = (Math.sin(radGamma));
 
-		app.socket.emit("data", Math.sin(radAlphaZ));
+		//app.socket.emit("data", Math.sin(radAlphaZ));
 
 		/*
 		app.data.movingAverage.alpha = (Math.abs(app.data.zeros.alpha-app.data.alpha) * 0.4) + (app.data.movingAverage.alpha * (1 - 0.4));

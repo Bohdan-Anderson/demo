@@ -13,6 +13,54 @@ var app = {
 	clickButton: function(event) {
 		app.data.time = new Date().getTime()
 		app.socket.emit("data", app.data)
+	},
+	standardDev: function() {
+
+		if (compare == true) {
+
+		for (var i = 0; i < win; i++) {
+
+			carray[i] = {alpha: diff(arr1[i].alpha,arr2[i].alpha), beta: diff(arr1[i].beta,arr2[i].beta), gamma: diff(arr1[i].gamma,arr2[i].gamma)};
+
+			if (win == 5) {
+				itstime = true;
+			}
+		}
+
+		if (itstime == true) {
+			var same = variance(carray,mean(carray));
+
+			if (Math.sqrt(same.alpha) <= 5 && Math.sqrt(same.beta) <= 5 && Math.sqrt(same.gamma) <= 15) {
+				console.log("PAIRED");
+			} else {
+				console.log("Not Paired");
+			}
+		}
+	}
+
+		function mean(objArr) {
+		var meansA = null, meansB = null, meansG = null, means = {};
+		for (var i = 0, l = 5; i !== l; i++) {
+  			meansA += objArr[i].alpha;
+  			meansB += objArr[i].beta;
+  			meansG += objArr[i].gamma;
+		}
+		means = {alpha: meansA/5, beta: meansB/5, gamma: meansG/5};
+		return means;
+	}
+
+		function variance(objArr,objAvg) {
+		var varyA = null, varyB = null, varyG = null, vary = {};
+		for (var i = 0, l = 5; i !== l; i++) {
+
+			//Square the difference value derived from the average
+  			varyA += (diff(objArr[i].alpha,objAvg.alpha)*(diff(objArr[i].alpha,objAvg.alpha)));
+  			varyB += (diff(objArr[i].beta,objAvg.beta)*(diff(objArr[i].beta,objAvg.beta)));
+  			varyG += (diff(objArr[i].gamma,objAvg.gamma)*(diff(objArr[i].gamma,objAvg.gamma)));
+		}
+			vary = {alpha: varyA/5, beta: varyB/5, gamma: varyG/5};
+			return vary
+		}
 	}
 }
 app.init();
@@ -75,6 +123,7 @@ app.init();
 	}
 
 	//Finds the mean average of all values for each dimension in the array
+	
 	function mean(objArr) {
 		var meansA = null, meansB = null, meansG = null, means = {};
 		for (var i = 0, l = 5; i !== l; i++) {
