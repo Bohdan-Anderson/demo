@@ -8,7 +8,8 @@ var game = {
 
 var time = {
 	point: [],
-	size: 500,
+	time_size: 250,
+	checker_interval: 100,
 	init: function() {
 		game.io.sockets.on('connection', time.connect);
 		time.checker.init();
@@ -20,8 +21,14 @@ var time = {
 					if (time.point[a][1]["id"] != socket["id"]) {
 						socket.emit("tap demo paired", data);
 						time.point[0][1].emit("tap demo paired", data)
-						//we could remove the old data point here but it doens't really matter
+						time.point.splice(a, 1);
+						a -= 1;
+						max -= 1;
 						return false;
+					} else {
+						time.point.splice(a, 1);
+						a -= 1;
+						max -= 1;
 					}
 				}
 				time.point.push([new Date().getTime(), socket])
@@ -31,15 +38,15 @@ var time = {
 	checker: {
 		looptarget: null,
 		init: function() {
-			time.checker.looptarget = setInterval(time.checker.loop, 100);
+			time.checker.looptarget = setInterval(time.checker.loop, time.checker_interval);
 		},
 		loop: function() {
 			var t = new Date().getTime();
-			// console.log("\n\n")
-			// console.log("start time: \t" + t);
+			console.log("\n\n")
+			console.log("start time: \t" + t);
 			for (var i = time.point.length - 1; i >= 0; i--) {
-				// console.log("\t\t" + time.point[i][0])
-				if (time.point[i][0] + time.size < t) {
+				console.log("\t\t" + time.point[i][0])
+				if (time.point[i][0] + time.time_size < t) {
 					time.point.splice(i, 1);
 					i -= 1;
 				}
