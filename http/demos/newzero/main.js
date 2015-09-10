@@ -2,67 +2,73 @@ var app = {
 
 	data: {
 		type: "zero",
-		zero: 0
+		movingAverage: {alpha: 0, beta: 0, gamma: 0}
 	},
+	noSend: {
 
-	deviceorientation_previous: new Date(),
+	},
 
 	init: function() {
 		console.log("starting");
 		app.socket = io.connect(SETTINGS.ip);
-		window.addEventListener("deviceorientation", app.onOrientaionEvent, true);
-		//setInterval(app.beat, 500);
+		setInterval(app.beat, 500);
+		window.addEventListener('deviceorientation', app.onOrientaionEvent, true);
 		app.target= $("#datafeed")
-		// app.rotateThis = $("#transformtarget")
 		$("#wrapper").click(app.makeZero);
 	},
-
 	beat: function(event) {
-		app.socket.emit("data", app.data);
-	},
-	rotate: function(ammount){
-
+		app.measure();
+		//app.socket.emit("data", app.data.alphaCurve);
 	},
 	makeZero: function(){
-		zeroin = true;
 
-		//This value gets set when zeroed
+		app.socket.emit("data", "- ZEROED -");
 
-		timing = Date.now();
+		app.data.zero = {}
 
-		zeroAlpha = Math.abs(Math.floor(alpha - 180));
-		zeroBeta = Math.abs(Math.floor(beta));
-		zeroGamma = Math.abs(Math.floor(gamma));
+		app.data.zero.alpha = app.data.alpha;
+		app.data.zero.beta = app.data.beta;
+		app.data.zero.gamma = app.data.gamma;
 
-		console.log(zeroBeta);
+	
+		/*
+		app.socket.emit("data", "Deg Alpha: "+app.data.alpha+" = Units: "+(Math.sin(radAlpha)));
+		app.socket.emit("data", "Deg Beta: "+(app.mapRange(app.data.beta,-180,180,0,360))+" = Units: "+(Math.sin(radBeta)));
+		app.socket.emit("data", "Deg Gamma: "+(app.mapRange(app.data.gamma,-90,90,0,360))+" = Units: "+(Math.sin(radGamma)));
+		*/
 
-    	if (zeroin == true) {
-    		console.log("time: "+timing);
-			
-			//Another way to improve accuracy would be to take into account the timing that each user presses zero
+	},
+	mapRange: function(val,l1,h1,l2,h2) {
+		return l2 + (h2 - l2) * (val - l1) / (h1 - l1);
+	},
+	measure: function() {
+		//Let's do some math
 
-			var alphaDyn1 = Math.abs(Math.floor(alpha - 180));
-			var betaDyn1 = Math.abs(Math.floor(beta));
-			var gammaDyn1 = Math.abs(Math.floor(gamma));
+		//This sets up for SIN
 
-			// mvgAvg1a = (Math.abs(zeroAlpha1-alphaDyn1) * 0.4) + (mvgAvg1a * (1 - 0.4));
-			// mvgAvg2a = (Math.abs(zeroAlpha2-alphaDyn2) * 0.4) + (mvgAvg2a * (1 - 0.4));
+		radAlpha = (Math.PI/180) * app.data.alpha; //alpha: [0,360]
+		radAlphaZ = (Math.PI/180) * (app.data.zero.alpha-app.data.alpha); //alpha: [0,360]
+		radBeta = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
+		radGamma = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
 
-			// mvgAvg1b = (Math.abs(zeroBeta1-betaDyn1) * 0.4) + (mvgAvg1b * (1 - 0.4));
-			// mvgAvg2b = (Math.abs(zeroBeta2-betaDyn2) * 0.4) + (mvgAvg2b * (1 - 0.4));
+		app.data.alphaCurve = (Math.sin(radAlpha));
+		app.data.betaCurve = (Math.sin(radBeta));
+		app.data.gammaCurve = (Math.sin(radGamma));
 
-			// mvgAvg1g = (Math.abs(zeroGamma1-gammaDyn1) * 0.4) + (mvgAvg1g * (1 - 0.4));
-			// mvgAvg2g = (Math.abs(zeroGamma2-gammaDyn2) * 0.4) + (mvgAvg2g * (1 - 0.4));
+		app.socket.emit("data", Math.sin(radAlphaZ));
 
-			// console.log("Moving Avg1 A: "+(Math.floor(mvgAvg1a)));
-			// console.log("Moving Avg1 B: "+(Math.floor(mvgAvg1b)));
-			// console.log("Moving Avg1 G: "+(Math.floor(mvgAvg1g)));
-    	}
+		/*
+		app.data.movingAverage.alpha = (Math.abs(app.data.zeros.alpha-app.data.alpha) * 0.4) + (app.data.movingAverage.alpha * (1 - 0.4));
+		app.data.movingAverage.beta = (Math.abs(app.data.zeros.beta-app.data.beta) * 0.4) + (app.data.movingAverage.beta * (1 - 0.4));
+		app.data.movingAverage.gamma = (Math.abs(app.data.zeros.gamma-app.data.gamma) * 0.4) + (app.data.movingAverage.gamma * (1 - 0.4));
+		*/
+
+		//app.socket.emit("data", "Moving: "+app.data.movingAverage.alpha+" : "+app.data.movingAverage.beta+" : "+app.data.movingAverage.gamma);
 	},
 	onOrientaionEvent: function(event) {
-		gamma = event.gamma;
-		beta = event.beta;
-		alpha = event.alpha;
+		app.data.alpha = event.alpha;
+		app.data.beta = event.beta;
+		app.data.gamma = event.gamma;
 	}
 }
 app.init();
