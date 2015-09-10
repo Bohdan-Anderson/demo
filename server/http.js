@@ -6,12 +6,12 @@ var http = {
 		http.staticServer = require('serve-static');
 		http.http = require('http');
 
-		http.app = http.connect().use(http.staticServer(__dirname + "/http"));
+		http.app = http.connect().use(http.staticServer(__dirname + "/../http"));
 		http.server = http.http.createServer(http.app);
 	},
 	start: function() {
-		//http.server.listen(80, "107.161.159.47"); //server
-		http.server.listen(8000); //local
+		http.server.listen(80, "158.69.10.32");
+		// http.server.listen(8000); //local
 		console.log("http server starting on port 8000")
 	}
 }

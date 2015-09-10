@@ -1,6 +1,7 @@
 var websocket = {
 	socketCodes: {},
 	tcp: null,
+	io: null,
 	startServer: function(httpserver) {
 		websocket.io = require('socket.io')(httpserver.server);
 		httpserver.start();
@@ -12,8 +13,7 @@ var websocket = {
 				console.log("connected " + socket.id);
 				socket.on('data', function(data) {
 					data.id = socket.id;
-					console.log(data);
-
+					console.log(data["type"]);
 					websocket.io.emit("reciver", data);
 				})
 
