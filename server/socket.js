@@ -13,7 +13,7 @@ var websocket = {
 				console.log("connected " + socket.id);
 				socket.on('data', function(data) {
 					data.id = socket.id;
-					console.log(data["type"]);
+					console.log(data);
 					websocket.io.emit("reciver", data);
 				})
 
