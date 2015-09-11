@@ -10,11 +10,39 @@ var game = {
 
 
 
+var possible_pairs_root = function(main_socket) {
+	var out = {
+		this_socket: main_socket,
+		pairs: [],
+		message_pairs: function(message_name, data) {
+			if (!out.pairs.length) {
+				console.log(out.this_socket.id + " found no pairs");
+				return false;
+			}
+			out.this_socket.emit(message_name, data)
+			for (var a = 0, max = out.pairs.length; a < max; ++a) {
+				out.pairs[a].emit(message_name, data)
+			}
+		},
+		quarter_check: function() {
+			out.message_pairs("quarter check 5", out.pairs.length);
+			console.log("\nquarter check")
+		},
+		check: function() {
+			out.message_pairs("final check 7", out.pairs.length);
+			console.log("\nfinal check")
+		}
+
+	};
+
+	return out;
+}
+
 
 
 var time = {
 	point: [], // data is store in there [[time,socket],[time,socket],[time,socket]]
-	time_size: 250,
+	time_size: 2000,
 	checker_interval: 100,
 	init: function() {
 		game.io.sockets.on('connection', time.connect);
@@ -27,23 +55,38 @@ var time = {
 	// we test against the time.point array
 	connect: function(socket) {
 		socket.on('data', function(data) {
-			if (data.type == "tap demo start pair") {
-				for (var a = 0, max = time.point.length; a < max; ++a) {
-					if (time.point[a][1]["id"] != socket["id"]) {
-						socket.emit("tap demo paired", data);
-						time.point[0][1].emit("tap demo paired", data)
-						time.point.splice(a, 1);
-						a -= 1;
-						max -= 1;
-						return false;
-					} else {
-						time.point.splice(a, 1);
-						a -= 1;
-						max -= 1;
+			if (data.type == "tap message 1") {
+				// we ask the client to wait till they are out of the time pairing zome
+				socket.emit("wait 2", time.time_size);
+				if (time.point.length) {
+					socket.possible_pairs = possible_pairs_root(socket);
+					for (var a = 0, max = time.point.length; a < max; ++a) {
+						if (time.point[a][1]["id"] != socket["id"]) {
+							socket.possible_pairs.pairs.push(time.point[0][1]);
+						} else {
+							time.point.splice(a, 1);
+							a -= 1;
+							max -= 1;
+						}
 					}
-				}
-				time.point.push([new Date().getTime(), socket])
-			}
+					socket.possible_pairs.message_pairs("time paired 3", "worked!");
+				};
+				time.point.push([new Date().getTime(), socket]);
+			};
+		});
+		socket.on('paired data 4', function(data) {
+			// console.log("\n\t\tquart data")
+			socket.pairing_data = data;
+			if (socket.possible_pairs) {
+				socket.possible_pairs.quarter_check();
+			};
+		});
+		socket.on('paired data 6', function(data) {
+			// console.log("\t\tfinal data")
+			socket.pairing_data = data;
+			if (socket.possible_pairs) {
+				socket.possible_pairs.check();
+			};
 		});
 	},
 
@@ -54,10 +97,8 @@ var time = {
 		},
 		loop: function() {
 			var t = new Date().getTime();
-			console.log("\n\n")
-			console.log("start time: \t" + t);
 			for (var i = time.point.length - 1; i >= 0; i--) {
-				console.log("\t\t" + time.point[i][0])
+				// console.log("\t\t" + time.point[i][0])
 				if (time.point[i][0] + time.time_size < t) {
 					time.point.splice(i, 1);
 					i -= 1;

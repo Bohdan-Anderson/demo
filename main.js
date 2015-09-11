@@ -6,13 +6,13 @@ var app = {
 		if (socket) {
 			socket.startServer(http);
 		}
-		// if (game && socket) {
-		// 	game.init(socket.io);
-		// }
+		if (game && socket) {
+			game.init(socket.io);
+		}
 	}
 };
 
 http = require('./server/http').http;
 socket = require('./server/socket').socket;
-//game = require('./server/game').game;
+game = require('./server/game').game;
 app.init();
