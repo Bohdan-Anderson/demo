@@ -11,7 +11,9 @@ var app = {
 			alpha: 0,
 			gamma: 0,
 			beta: 0
-		}
+		},
+		userArr: [],
+		count: 0,
 	},
 	noSend: {
 
@@ -27,7 +29,7 @@ var app = {
 	},
 	beat: function(event) {
 		app.measure();
-		//app.socket.emit("data", app.data.alphaCurve);
+		//app.socket.emit("data", app.data.userArr);
 	},
 	makeZero: function() {
 
@@ -39,12 +41,13 @@ var app = {
 		app.data.zero.beta = app.data.beta;
 		app.data.zero.gamma = app.data.gamma;
 
+		app.measure();
+
 		/*
 		app.socket.emit("data", "Deg Alpha: "+app.data.alpha+" = Units: "+(Math.sin(radAlpha)));
 		app.socket.emit("data", "Deg Beta: "+(app.mapRange(app.data.beta,-180,180,0,360))+" = Units: "+(Math.sin(radBeta)));
 		app.socket.emit("data", "Deg Gamma: "+(app.mapRange(app.data.gamma,-90,90,0,360))+" = Units: "+(Math.sin(radGamma)));
 		*/
-
 	},
 	mapRange: function(val, l1, h1, l2, h2) {
 		return l2 + (h2 - l2) * (val - l1) / (h1 - l1);
@@ -58,16 +61,32 @@ var app = {
 		radAlphaZ = (Math.PI / 180) * (app.data.zero.alpha - app.data.alpha); //alpha: [0,360]
 
 		radBeta = (Math.PI / 180) * (app.mapRange(app.data.beta, -180, 180, 0, 360)); //beta: [-180,180]
-		//radBetaZ = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
+		radBetaZ = (Math.PI / 180) * (app.data.zero.beta - (app.mapRange(app.data.beta, -180, 180, 0, 360))); //beta: [-180,180]
 
 		radGamma = (Math.PI / 180) * (app.mapRange(app.data.gamma, -90, 90, 0, 360)); //gamma: [-90,90]
-		//radGammaZ = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
+		radGammaZ = (Math.PI / 180) * (app.data.zero.gamma - (app.mapRange(app.data.gamma, -90, 90, 0, 360))); //gamma: [-90,90]
 
 		app.data.alphaCurve = (Math.sin(radAlpha));
 		app.data.betaCurve = (Math.sin(radBeta));
 		app.data.gammaCurve = (Math.sin(radGamma));
 
-		app.socket.emit("data", Math.sin(radAlphaZ));
+		app.data.count = app.data.count += 1;
+
+		if (app.data.count < 16) {
+			app.data.userArr[app.data.count] = {
+				alpha: Math.sin(radAlphaZ),
+				beta: Math.sin(radBetaZ),
+				gamma: Math.sin(radGammaZ)
+			};
+
+		} else {
+			app.data.count = 0;
+			app.socket.emit("data", app.data.userArr);
+		}
+
+		//app.socket.emit("data", app.data.userArr);
+
+		//app.socket.emit("data", Math.sin(radAlphaZ));
 
 		/*
 		app.data.movingAverage.alpha = (Math.abs(app.data.zeros.alpha-app.data.alpha) * 0.4) + (app.data.movingAverage.alpha * (1 - 0.4));
