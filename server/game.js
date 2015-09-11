@@ -15,22 +15,25 @@ var possible_pairs_root = function(main_socket) {
 		this_socket: main_socket,
 		pairs: [],
 		message_pairs: function(message_name, data) {
+			console.log("device: \t" + out.this_socket.id);
 			if (!out.pairs.length) {
 				console.log(out.this_socket.id + " found no pairs");
 				return false;
 			}
 			out.this_socket.emit(message_name, data)
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
+				console.log(" --\t\t" + out.pairs[a].id);
 				out.pairs[a].emit(message_name, data)
 			}
 		},
 		quarter_check: function() {
-			out.message_pairs("quarter check 5", out.pairs.length);
 			console.log("\nquarter check")
+			out.message_pairs("quarter check 5", out.pairs.length);
 		},
 		check: function() {
-			out.message_pairs("final check 7", out.pairs.length);
 			console.log("\nfinal check")
+			out.message_pairs("final check 7", out.pairs.length);
+
 		}
 
 	};
@@ -62,13 +65,14 @@ var time = {
 					socket.possible_pairs = possible_pairs_root(socket);
 					for (var a = 0, max = time.point.length; a < max; ++a) {
 						if (time.point[a][1]["id"] != socket["id"]) {
-							socket.possible_pairs.pairs.push(time.point[0][1]);
+							socket.possible_pairs.pairs.push(time.point[a][1]);
 						} else {
 							time.point.splice(a, 1);
 							a -= 1;
 							max -= 1;
 						}
 					}
+					console.log("\ninitial pairing")
 					socket.possible_pairs.message_pairs("time paired 3", "worked!");
 				};
 				time.point.push([new Date().getTime(), socket]);
