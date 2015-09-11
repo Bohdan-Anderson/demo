@@ -31,7 +31,13 @@ var possible_pairs_root = function(main_socket) {
 			out.message_pairs("quarter check 5", out.pairs.length);
 		},
 		check: function() {
-			console.log("\nfinal check")
+			console.log("\nfinal check\n\n")
+			console.log(out.this_socket.pairing_data.std);
+			// console.log("main:\t" + out.this_socket.pairing_data.std[0] + " " + out.this_socket.pairing_data.std[1] + " " + out.this_socket.pairing_data.std[2]);
+			for (var a = 0, max = out.pairs.length; a < max; ++a) {
+				console.log(out.pairs[a].pairing_data.std);
+				// console.log("out:\t" + out.pairs[a].pairing_data.std[0] + " " + out.pairs[a].pairing_data.std[1] + " " + out.pairs[a].pairing_data.std[2]);
+			}
 			out.message_pairs("final check 7", out.pairs.length);
 
 		}
@@ -79,16 +85,16 @@ var time = {
 			};
 		});
 		socket.on('paired data 4', function(data) {
-			console.log("\n\t\tquart data")
-			console.log(data["std_quart"]);
+			// console.log("\n\t\tquart data")
+			// console.log(data["raw"]);
 			socket.pairing_data = data;
 			if (socket.possible_pairs) {
 				socket.possible_pairs.quarter_check();
 			};
 		});
 		socket.on('paired data 6', function(data) {
-			console.log("\t\tfinal data")
-			console.log(data["std"]);
+			// console.log("\t\tfinal data")
+			// console.log(data["raw"]);
 			socket.pairing_data = data;
 			if (socket.possible_pairs) {
 				socket.possible_pairs.check();
