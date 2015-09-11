@@ -2,7 +2,16 @@ var app = {
 
 	data: {
 		type: "zero",
-		movingAverage: {alpha: 0, beta: 0, gamma: 0}
+		movingAverage: {
+			alpha: 0,
+			beta: 0,
+			gamma: 0
+		},
+		zero: {
+			alpha: 0,
+			gamma: 0,
+			beta: 0
+		}
 	},
 	noSend: {
 
@@ -13,14 +22,14 @@ var app = {
 		app.socket = io.connect(SETTINGS.ip);
 		setInterval(app.beat, 500);
 		window.addEventListener('deviceorientation', app.onOrientaionEvent, true);
-		app.target= $("#datafeed")
+		app.target = $("#datafeed")
 		$("#wrapper").click(app.makeZero);
 	},
 	beat: function(event) {
 		app.measure();
 		//app.socket.emit("data", app.data.alphaCurve);
 	},
-	makeZero: function(){
+	makeZero: function() {
 
 		app.socket.emit("data", "- ZEROED -");
 
@@ -37,7 +46,7 @@ var app = {
 		*/
 
 	},
-	mapRange: function(val,l1,h1,l2,h2) {
+	mapRange: function(val, l1, h1, l2, h2) {
 		return l2 + (h2 - l2) * (val - l1) / (h1 - l1);
 	},
 	measure: function() {
@@ -45,20 +54,20 @@ var app = {
 
 		//This sets up for SIN
 
-		radAlpha = (Math.PI/180) * app.data.alpha; //alpha: [0,360]
-		radAlphaZ = (Math.PI/180) * (app.data.zero.alpha-app.data.alpha); //alpha: [0,360]
+		radAlpha = (Math.PI / 180) * app.data.alpha; //alpha: [0,360]
+		radAlphaZ = (Math.PI / 180) * (app.data.zero.alpha - app.data.alpha); //alpha: [0,360]
 
-		radBeta = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
+		radBeta = (Math.PI / 180) * (app.mapRange(app.data.beta, -180, 180, 0, 360)); //beta: [-180,180]
 		//radBetaZ = (Math.PI/180) * (app.mapRange(app.data.beta,-180,180,0,360)); //beta: [-180,180]
 
-		radGamma = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
+		radGamma = (Math.PI / 180) * (app.mapRange(app.data.gamma, -90, 90, 0, 360)); //gamma: [-90,90]
 		//radGammaZ = (Math.PI/180) * (app.mapRange(app.data.gamma,-90,90,0,360)); //gamma: [-90,90]
 
 		app.data.alphaCurve = (Math.sin(radAlpha));
 		app.data.betaCurve = (Math.sin(radBeta));
 		app.data.gammaCurve = (Math.sin(radGamma));
 
-		//app.socket.emit("data", Math.sin(radAlphaZ));
+		app.socket.emit("data", Math.sin(radAlphaZ));
 
 		/*
 		app.data.movingAverage.alpha = (Math.abs(app.data.zeros.alpha-app.data.alpha) * 0.4) + (app.data.movingAverage.alpha * (1 - 0.4));
@@ -69,9 +78,13 @@ var app = {
 		//app.socket.emit("data", "Moving: "+app.data.movingAverage.alpha+" : "+app.data.movingAverage.beta+" : "+app.data.movingAverage.gamma);
 	},
 	onOrientaionEvent: function(event) {
+		//A little bit better but it needs more filtering and smoothing.
+		//app.data.alpha = app.data.movingAverage.alpha = (event.alpha * 0.6) + (app.data.movingAverage.alpha * (1 - 0.6));
 		app.data.alpha = event.alpha;
 		app.data.beta = event.beta;
 		app.data.gamma = event.gamma;
+
+		//app.socket.emit("data", app.data.alpha);
 	}
 }
 app.init();
