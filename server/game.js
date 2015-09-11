@@ -79,14 +79,16 @@ var time = {
 			};
 		});
 		socket.on('paired data 4', function(data) {
-			// console.log("\n\t\tquart data")
+			console.log("\n\t\tquart data")
+			console.log(data["std_quart"]);
 			socket.pairing_data = data;
 			if (socket.possible_pairs) {
 				socket.possible_pairs.quarter_check();
 			};
 		});
 		socket.on('paired data 6', function(data) {
-			// console.log("\t\tfinal data")
+			console.log("\t\tfinal data")
+			console.log(data["std"]);
 			socket.pairing_data = data;
 			if (socket.possible_pairs) {
 				socket.possible_pairs.check();
