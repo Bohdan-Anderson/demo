@@ -6,12 +6,14 @@ var app = {
 	},
 
 	clickButton: function(event) {
-		var t = new Date().getTime()
-		var out = {
-			"time": t,
-			"type": this.id
-		};
-		app.socket.emit("moc_pair", out);
+		if (this.id) {
+			var t = new Date().getTime()
+			var out = {
+				"time": t,
+				"type": this.id
+			};
+			app.socket.emit("moc_pair", out);
+		}
 	}
 }
 app.init();

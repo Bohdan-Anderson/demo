@@ -7,7 +7,7 @@
   background-color: #fff; }
   .button #button:active {
     color: #fff;
-    background-color: #000; }
+    background-color: black; }
 
 #zeropage {
   width: 100%;
@@ -32,5 +32,3 @@
       #zeropage > div > div > span {
         display: table-cell;
         vertical-align: middle; }
-
-/*# sourceMappingURL=demo.css.map */

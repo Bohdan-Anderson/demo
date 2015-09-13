@@ -8,6 +8,7 @@ button{
 	color: inherit;
 	font-weight: bolder;
     margin-right: 1rem;
+    margin-top: 1rem;
 }
 
 button:hover{
