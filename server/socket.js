@@ -10,12 +10,13 @@ var websocket = {
 	views: {
 		init: function() {
 			websocket.io.sockets.on('connection', function(socket) {
+				console.log("connection");
 				console.log("connected " + socket.id);
 				socket.on('data', function(data) {
 					data.id = socket.id;
 					console.log(data["type"]);
 					websocket.io.emit("reciver", data);
-				})
+				});
 
 				socket.on("disconnect", function(data) {
 					console.log("disconnect " + socket.id);
@@ -23,7 +24,13 @@ var websocket = {
 						type: "disconnect",
 						id: socket.id
 					})
-				})
+				});
+
+				socket.on("moc_pair", function(data) {
+					data.id = socket.id;
+					websocket.io.emit("reciver", data);
+					websocket.io.emit(("pairing_" + data.type), data)
+				});
 			});
 		}
 	},
