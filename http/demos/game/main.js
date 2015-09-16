@@ -4,20 +4,25 @@ var app = {
 		"state": "ready"
 	},
 	init: function() {
-		app.socket = io.connect(SETTINGS.ip);
-		// app.record.init();
-		// return false;
-		app.socket.on("wait 2", app.wait);
-		app.socket.on("time paired 3", app.found_potential_pair);
-		app.socket.on("quarter check 5", app.quart_check);
-		app.socket.on("final check 7", app.final_check);
-		$("#button").click(app.clickButton);
+		// app.socket = io.connect(SETTINGS.ip);
+		// // app.record.init();
+		// // return false;
+		// app.socket.on("wait 2", app.wait);
+		// app.socket.on("time paired 3", app.found_potential_pair);
+		// app.socket.on("quarter check 5", app.quart_check);
+		// app.socket.on("final check 7", app.final_check);
+		// $("#button").click(app.clickButton);
+		app.game.init();
 	},
 
 	clickButton: function(event) {
+		if (screenfull.enabled && app.game.fullscreen == true) {
+			screenfull.request();
+		}
 		app.data.time = new Date().getTime()
 		if (app.data.state == "ready") {
 			app.socket.emit("data", app.data)
+			app.game.phase4.init();
 			app.data.state = "wait"
 			pr("pressed button waiting for server to respond");
 		} else if (app.data.state == "wait") {
@@ -34,11 +39,14 @@ var app = {
 		app.record.init();
 		app.when_not_paired = window.setTimeout(function() {
 			app.data.state = "ready"
-			pr("you can try to send again, no one click close in time to you");
+			app.game.phase3.init("no_other_clicks");
+			pr("");
+			// pr("you can try to send again, no one click close in time to you");
 		}, data);
 	},
 	found_potential_pair: function(data) {
 		window.clearTimeout(app.when_not_paired);
+		$(document.body).addClass("tracking_motion");
 		app.data.state = "recording";
 		pr("found potential pair");
 	},
@@ -46,7 +54,11 @@ var app = {
 		pr("quater check possible " + data + " devices")
 	},
 	final_check: function(data) {
-		app.record.stop();
+		if (data.status == "success") {
+
+		} else {
+
+		}
 		pr("final check possible " + data + " devices")
 		app.data.state = "ready";
 	}
@@ -95,12 +107,15 @@ app.record = {
 	message_quart: function() {
 		console.log(app.record.data);
 		app.record.data.std_quart = app.std_math.init();
+		app.record.data.element = app.data.element;
 		app.socket.emit("paired data 4", app.record.data);
 	},
 	message_object: null,
 	message: function() {
 		app.record.data.std = app.std_math.init();
+		app.record.data.element = app.data.element;
 		app.socket.emit("paired data 6", app.record.data);
+		app.record.stop();
 	},
 	stop: function() {
 		window.removeEventListener('deviceorientation', app.record.on_orientaion_event, true);
@@ -177,6 +192,3 @@ app.std_math = {
 		app.std_math.d.variation.g = app.std_math.d.variation.g / length;
 	}
 }
-
-
-app.init();

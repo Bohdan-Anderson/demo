@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					cwd: 'http/assets/scss',
-					src: ['*.scss'],
+					src: ['main.scss'],
 					dest: 'http/assets/css',
 					ext: '.css'
 				}]

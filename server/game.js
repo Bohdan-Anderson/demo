@@ -14,6 +14,7 @@ var possible_pairs_root = function(main_socket) {
 	var out = {
 		this_socket: main_socket,
 		pairs: [],
+		paired: null,
 		message_pairs: function(message_name, data) {
 			console.log("device: \t" + out.this_socket.id);
 			if (!out.pairs.length) {
@@ -26,6 +27,18 @@ var possible_pairs_root = function(main_socket) {
 				out.pairs[a].emit(message_name, data)
 			}
 		},
+		message_winners: function(message_name, data) {
+			console.log("winners: \t" + out.this_socket.id);
+			out.this_socket.emit(message_name, data);
+			out.paired.emit(message_name, data);
+		},
+		message_losers: function(message_name, data) {
+			for (var a = 0, max = out.pairs.length; a < max; ++a) {
+				if (out.pairs[a].id != out.paired.id) {
+					out.pairs[a].emit(message_name, data)
+				}
+			}
+		},
 		quarter_check: function() {
 			console.log("\nquarter check")
 			out.message_pairs("quarter check 5", out.pairs.length);
@@ -34,14 +47,25 @@ var possible_pairs_root = function(main_socket) {
 			console.log("\nfinal check\n\n")
 			//console.log(out.this_socket.pairing_data.std); // OLD
 			//console.log(out.this_socket.pairing_data.std);
-			console.log(out.this_socket.pairing_data.raw);
+			// console.log(out.this_socket.pairing_data.raw);
 			// console.log("main:\t" + out.this_socket.pairing_data.std[0] + " " + out.this_socket.pairing_data.std[1] + " " + out.this_socket.pairing_data.std[2]);
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
 				//console.log(out.pairs[a].pairing_data.raw); //FIX
-				console.log(out.pairs[a].pairing_data.raw);
+				// console.log(out.pairs[a].pairing_data.raw);
 				//console.log("out:\t" + out.pairs[a].pairing_data.std[0] + " " + out.pairs[a].pairing_data.std[1] + " " + out.pairs[a].pairing_data.std[2]);
+				out.paired = out.pairs[a]
 			}
-			out.message_pairs("final check 7", out.pairs.length);
+			if (out.pairs.length >= 1) {
+				out.message_winners("final check 7", {
+					"status": "success",
+					"pairs": [out.this_socket.pairing_data.element, out.paired.pairing_data.element]
+				});
+				out.message_losers("final check 7", {
+					"status": "failed"
+				})
+			} else {
+				out.message_pairs("final check 7", false);
+			}
 
 		}
 
@@ -69,7 +93,7 @@ var time = {
 		socket.on('data', function(data) {
 			if (data.type == "tap message 1") {
 				// we ask the client to wait till they are out of the time pairing zome
-				socket.emit("wait 2", time.time_size);
+				socket.emit("wait 2", time.time_size * 2);
 				if (time.point.length) {
 					socket.possible_pairs = possible_pairs_root(socket);
 					for (var a = 0, max = time.point.length; a < max; ++a) {

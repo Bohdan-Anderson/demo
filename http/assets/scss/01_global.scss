@@ -1,9 +1,10 @@
 html,body{
 	padding: 0;
 	margin: 0;
-	height: 100%;
+	min-height: 100%;
+	min-height: 100vh;
 	width: 100%;
-	overflow: hidden;
+	// overflow: hidden;
 	font-family: sans-serif;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -12,6 +13,8 @@ html,body{
 	-ms-user-select: none;
 	user-select: none;
 	text-align: center;
+	background-color: $black;
+	color: $white;
 }
 
 ul,li{
@@ -19,3 +22,114 @@ ul,li{
 	margin: 0;
 	padding: 0;
 }
+
+a{
+	color: inherit;
+}
+
+@for $i from 1 through 5 {
+	#phase#{$i}{
+		display: none;
+	}
+	.phase#{$i}{
+		#phase#{$i} {
+			display: block;
+		}
+	}
+}
+
+button{
+	background-color: $black;
+	border: 2px solid $white;
+	width: 5rem;
+	height: 5rem;
+	border-radius: 100%;
+	font-size: inherit;
+	color: inherit;
+	font-family: inherit;
+	font-weight: inherit;
+
+	&:active,&:focus{
+		background-color: $white;
+		color: $black;
+		outline:none;
+	}
+}
+
+h1,h2,h3{
+	text-transform: uppercase;
+}
+
+.center_w_table{
+	display: table;
+	height: 100%;
+	width: 100%;
+	> div{
+		display: table-cell;
+		vertical-align: middle;
+	}
+}
+
+
+
+
+
+
+
+
+#jsmessage{
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+	width: 100%;
+	padding: 0.5rem;
+}
+
+// Pase 2
+	#user_choose_type {
+		width: 50%;
+		min-width: 230px;
+		max-width: 400px;
+		margin: 0 auto;
+		li{
+			width: 50%;
+			display: inline-table;
+			a{
+				display: table-cell;
+				padding: 3rem;
+				vertical-align: middle;
+			}
+		}
+	}
+
+// Pase 3
+	.error{
+		display: none;
+		position: fixed;
+		bottom: 0;
+		text-align: center;
+		width: 100%;
+	}
+
+	.no_other_clicks{
+		.error{
+			display: block;
+		}
+	}
+
+// Pase 4
+	.center_icon_change{
+		@extend button;
+		margin: 0 auto;
+		&:active,&:focus{
+			background-color: $black;
+		}
+	}
+	.tracking_motion{
+		background-color: #f0c;
+	}
+
+
+
+
+

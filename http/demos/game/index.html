@@ -12,10 +12,9 @@
 	<link rel="stylesheet" href="/assets/css/main.min.css"/>
 	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-	<script type="text/javascript" src="/assets/js/lib/jquery-1.9.0.js"></script>
 </head>
 
-<body>
+<body class="phase4">
 	<div id="wrapper">
 		<div id="phase1">
 			<!-- preamble -->
@@ -26,8 +25,13 @@
 
 				If they have a cookie we skip this step
 			-->
-			<h2>Preamble</h2>
-			<p>The text refering to the preamble :D</p>
+			<div class="center_w_table">
+				<div>
+					<h2>Preamble</h2>
+					<p>The text refering to the preamble :D</p>
+					<button id="user_to_phase2">Continue</button>
+				</div>
+			</div>
 		</div><div id="phase2">
 			<!-- set player type -->
 			<!-- 
@@ -38,12 +42,16 @@
 
 				If they have a cookie we skip this step.
 			-->
-			<ul>
-				<li><a href="#human" alt="human">human</a></li>
-				<li><a href="#wave" alt="wave">wave</a></li>
-				<li><a href="#water" alt="water">water</a></li>
-				<li><a href="#celluar" alt="celluar">celluar</a></li>
-			</ul>
+			<div class="center_w_table">
+				<div>
+					<ul id="user_choose_type">
+						<li><a href="#human" alt="human">human</a></li><li>
+						<a href="#wave" alt="wave">wave</a></li><li>
+						<a href="#water" alt="water">water</a></li><li>
+						<a href="#celluar" alt="celluar">celluar</a></li>
+					</ul>
+				</div>
+			</div>
 		</div><div id="phase3">
 			<!-- explain what you are -->
 			<!-- 
@@ -52,15 +60,26 @@
 				There is a button for them to start pairing...
 				this is the main focus of the page
 			 -->
-			 <div class="user_icon"></div>
-			 <button id="pairing_button"></button>
+			<div class="center_w_table">
+				<div>
+					<div class="user_icon"></div>
+					<button id="pairing_button">PAIR</button>
+				</div>
+			</div>
+			<div class="error">
+				you can try to send again, no one click close in time to you
+			</div>
 		</div><div id="phase4">
 			<!-- being pairing state -->
 			<!-- 
 				they have begun to pair with some one.
 				they recive all the possibilites of people they have begun to pair with
 			 -->
-			<div class="center_icon_change"></div>
+			<div class="center_w_table">
+				<div>
+					<div class="center_icon_change"></div>
+				</div>
+			</div>
 		</div><div id="phase5">
 			<!-- pairing fail -->
 			<!-- 
@@ -81,16 +100,17 @@
 			<p id="pairing_success"></p>
 		</div>
 	</div>
+	<div id="jsmessage"></div>
 
-<!-- 	<div id="wrapper">
-		<h1>Time Pair</h1>
-		<button id="button">Tap To Attempt Pairing</button>
-		<h2 id="jsmessage"></h2>
-	</div> -->
-
-
+	<script type="text/javascript" src="/assets/js/lib/jquery-1.9.0.js"></script>
+	<script type="text/javascript" src="/assets/js/lib/js.cookie.js"></script>
+	<script type="text/javascript" src="/assets/js/lib/screenfull.min.js"></script>
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="/assets/js/settings.js"></script>
 	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript">
+		app.init();
+	</script>
 </body>
 </html>
