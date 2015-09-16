@@ -2,7 +2,6 @@ var app = {
 	data: {
 		"type": "tap message 1",
 		"state": "ready",
-		count: 0,
 	},
 	init: function() {
 		app.socket = io.connect(SETTINGS.ip);
@@ -64,8 +63,7 @@ function pr(message) {
 
 app.record = {
 	time: 2000,
-	points: 20,
-	count: 0,
+	points: 128,
 	interval_id: null,
 	data: {
 		"raw": [],
@@ -74,8 +72,6 @@ app.record = {
 	},
 	data_temp: [],
 	init: function() {
-		//app.record.beat_interval_object = setInterval(app.record.beat);
-
 		app.socket.emit("data", "Recording...");
 		app.record.interval_id = setInterval(app.record.beat, 70);
 		window.addEventListener('deviceorientation', app.record.on_orientaion_event, true);
@@ -84,13 +80,14 @@ app.record = {
 		app.record.message_object = window.setTimeout(app.record.message, app.record.time);
 	},
 	beat: function(event) {
-		app.record.count = app.record.count + 1;
-		if (app.record.count < app.record.points) {
-			//record some data from the stream
+
+		if (app.record.data.raw.length < app.record.points) {
 			app.record.data.raw.push(app.zero.make(app.record.data_temp[0], app.record.data_temp[1], app.record.data_temp[2]));
+			app.socket.emit("data", app.zero.make(app.record.data_temp[0], app.record.data_temp[1], app.record.data_temp[2]));
 		} else {
 			app.socket.emit("data", "Stop!");
 			clearInterval(app.record.interval_id);
+			//app.socket.emit("data", app.record.data.raw);
 		}
 	},
 	on_orientaion_event: function(event) {
@@ -122,7 +119,6 @@ app.record = {
 			"std": [null, null, null],
 			"std_quart": [null, null, null]
 		};
-		//app.record.previous = null;
 	}
 }
 
@@ -146,12 +142,10 @@ app.zero = {
 		rad_b = Math.sin(rad_b);
 		rad_g = Math.sin(rad_g);
 
-		// console.log(rad_a);
-
 		return {
-			"a": parseFloat(rad_a.toFixed(17)),
-			"b": parseFloat(rad_b.toFixed(17)),
-			"g": parseFloat(rad_g.toFixed(17))
+			"a": rad_a,
+			"b": rad_b,
+			"g": rad_g
 		}
 	}
 }
