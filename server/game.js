@@ -13,6 +13,7 @@ var fakeSocket = function() {
 	var out = {
 		"pairing_data": {
 			"std": [Math.random(), Math.random(), Math.random()],
+			"agr": [Math.random(), Math.random(), Math.random()],
 			"table": "fake table",
 			"element": "human"
 		},
@@ -28,7 +29,7 @@ var fakeSocket = function() {
 var possible_pairs_root = function(main_socket) {
 	var out = {
 		this_socket: main_socket,
-		pairs: [], //it should be that     fakeList, //
+		pairs: [fakeSocket(), fakeSocket()], //it should be that     fakeList, //
 		paired: null,
 		message_pairs: function(message_name, data) {
 			console.log("device: \t" + out.this_socket.id);
@@ -63,7 +64,7 @@ var possible_pairs_root = function(main_socket) {
 		check: function() {
 			console.log("\n\n\nfinal check " + out.this_socket);
 
-			out.paired = out.find_closests_std(out.this_socket, out.pairs, 0.26);
+			out.paired = out.find_closests_std(out.this_socket, out.pairs, 0.26, 0.1);
 
 			if (!out.paired) {
 				// out.this_socket.emit("final check 7", {
@@ -96,32 +97,47 @@ var possible_pairs_root = function(main_socket) {
 			}
 
 		},
-		find_closests_std: function(ref, list, limit) {
+		find_closests_std: function(ref, list, limit, agr) {
 			var out = false,
+				arg_out = false,
 				min = limit || 99999999,
-				loc = 0;
+				loc = 0,
+				agr_min = agr,
+				agr_loc = 0;
 
 			console.log("--\t" + ref.id)
 			// console.log(ref.pairing_data.table)
 			for (var a = 0, max = list.length; a < max; ++a) {
 
-
 				// console.log(list[a].pairing_data.table)
 				if (list[a].pairing_data && !list[a].pairing_data.taken && list[a].id != ref.id) {
+					agr_loc = 0;
+					agr_loc += Math.abs(ref.pairing_data.agr[0] - list[a].pairing_data.agr[0]);
+					agr_loc += Math.abs(ref.pairing_data.agr[1] - list[a].pairing_data.agr[1]);
+					agr_loc += Math.abs(ref.pairing_data.agr[2] - list[a].pairing_data.agr[2]);
+					console.log(list[a].id + "\t agr\t " + agr_loc);
+					if (agr_loc < agr_min) {
+						agr_min = agr_loc;
+						arg_out = list[a];
+					}
+
 					loc = 0;
 					loc += Math.abs(ref.pairing_data.std[0] - list[a].pairing_data.std[0]);
 					loc += Math.abs(ref.pairing_data.std[1] - list[a].pairing_data.std[1]);
 					loc += Math.abs(ref.pairing_data.std[2] - list[a].pairing_data.std[2]);
-					console.log(list[a].id + " " + loc);
+					console.log(list[a].id + "\t std\t " + loc);
 					if (loc < min) {
 						min = loc;
 						out = list[a]
 					}
+
 				} else {
 					console.log(list[a].id + " no data")
 				}
 			}
-			console.log("sum difference of: " + min + "\n");
+			console.log("\nsum agle somet of: " + min + "");
+			console.log("sum difference of: " + agr_min + "\n");
+			// console.log("agr choose " + arg_out + "")
 			return out;
 		}
 

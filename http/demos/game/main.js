@@ -46,6 +46,7 @@ var app = {
 		}, data);
 	},
 	found_potential_pair: function(data) {
+		console.log("potential pair");
 		window.clearTimeout(app.when_not_paired);
 		$(document.body).addClass("tracking_motion");
 		app.data.state = "recording";
@@ -53,11 +54,12 @@ var app = {
 		pr("found potential pair");
 	},
 	quart_check: function(data) {
+		console.log("quarter check");
 		pr("quater check possible " + data + " devices")
 	},
 
 	final_check: function(data) {
-		// TODO
+		console.log("final check");
 		if (app.data.state == "recording") {
 			pr("a result came back " + data.status);
 			if (data.status == "success") {
@@ -71,8 +73,6 @@ var app = {
 				pr("wait to fail");
 			}
 		}
-		// pr("final check possible " + data + " devices")
-
 	},
 	wait_to_fail_obj: null,
 	wait_to_fail: function() {
@@ -134,6 +134,7 @@ app.record = {
 	},
 	final_message: function() {
 		app.record.data.std = app.std_math.init();
+		app.record.data.agr = app.agr.get(app.record.data.raw);
 		app.record.data.element = app.data.element;
 		// console.log(app.record.data);
 		var outa = "";
@@ -220,5 +221,40 @@ app.std_math = {
 		app.std_math.d.variation.a = app.std_math.d.variation.a / length;
 		app.std_math.d.variation.b = app.std_math.d.variation.b / length;
 		app.std_math.d.variation.g = app.std_math.d.variation.g / length;
+	}
+}
+
+app.agr = {
+	// a: 0 b: 0.2007557698059329 		g: 0.37256911887217337 		hardish
+	// a: 0 b: 0.012457420479415764 	g: 0.040596926855992914 	soft :/
+	// a: 0 b: 0.018636809536515753 	g: 0.022497699238421744 	no movement
+	// a: 0 b: 0.011800828369596714 	g: 0.014736137840923388 	soft
+	// a: 0 b: 0.0071129340441632265	g: 0.01761660730906322		no movement
+	// a: 0 b: 0.06381279301275204 		g: 0.09861663459377888		very aggresive
+	get: function(raw) {
+		if (typeof(raw) !== "object" && !raw.length) {
+			alert("a non array was passed into app.agr");
+			return false;
+		}
+		return app.agr.calc(raw);
+	},
+	calc: function(raw) {
+		var out = [0, 0, 0],
+			length = raw.length - 1,
+			t = {
+				"a": 0,
+				"b": 0,
+				"g": 0
+			};
+		// {"a": null,"b": null,"g": null}
+		for (var a = 0, max = length; a < max; ++a) {
+			t.a += Math.abs(raw[a].a - raw[a + 1].a);
+			t.b += Math.abs(raw[a].b - raw[a + 1].b);
+			t.g += Math.abs(raw[a].g - raw[a + 1].g);
+		}
+		out[0] = t.a / length
+		out[1] = t.b / length
+		out[2] = t.g / length
+		return out;
 	}
 }
