@@ -1,0 +1,96 @@
+<!DOCTYPE html lang="en">
+<html>
+<head>
+	<title>Demos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="mobile-web-app-capable" content="yes">
+
+
+	<link rel="stylesheet" href="/assets/css/main.min.css"/>
+	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+	<script type="text/javascript" src="/assets/js/lib/jquery-1.9.0.js"></script>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="phase1">
+			<!-- preamble -->
+			<!-- 
+				we need text and some dialog 
+				talking about what people are 
+				about to do.
+
+				If they have a cookie we skip this step
+			-->
+			<h2>Preamble</h2>
+			<p>The text refering to the preamble :D</p>
+		</div><div id="phase2">
+			<!-- set player type -->
+			<!-- 
+				give the player a randomized
+				list of player types.
+				They click a type, it goes big
+				then it is stored as a cookie.
+
+				If they have a cookie we skip this step.
+			-->
+			<ul>
+				<li><a href="#human" alt="human">human</a></li>
+				<li><a href="#wave" alt="wave">wave</a></li>
+				<li><a href="#water" alt="water">water</a></li>
+				<li><a href="#celluar" alt="celluar">celluar</a></li>
+			</ul>
+		</div><div id="phase3">
+			<!-- explain what you are -->
+			<!-- 
+				Explain who they are playing as
+				what does it mean that you choose this type?
+				There is a button for them to start pairing...
+				this is the main focus of the page
+			 -->
+			 <div class="user_icon"></div>
+			 <button id="pairing_button"></button>
+		</div><div id="phase4">
+			<!-- being pairing state -->
+			<!-- 
+				they have begun to pair with some one.
+				they recive all the possibilites of people they have begun to pair with
+			 -->
+			<div class="center_icon_change"></div>
+		</div><div id="phase5">
+			<!-- pairing fail -->
+			<!-- 
+				if they went through the whole process and where no paired?
+				we give an example of how pairing should be done?
+				explain it again?
+			 -->
+			<div class="user_icon"></div>
+			<p id="pairing_error_message"></p>
+		</div><div id="phase6">
+			<!-- visaul outcome -->
+			<!-- 
+				recives a message that they did pair with some one
+				and their image is now the merging icon and they are promted to
+				look up at the screen.
+			 -->
+			<div id="pairing_success_icon"></div>
+			<p id="pairing_success"></p>
+		</div>
+	</div>
+
+<!-- 	<div id="wrapper">
+		<h1>Time Pair</h1>
+		<button id="button">Tap To Attempt Pairing</button>
+		<h2 id="jsmessage"></h2>
+	</div> -->
+
+
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/assets/js/settings.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+</body>
+</html>
