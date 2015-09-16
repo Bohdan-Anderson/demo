@@ -29,6 +29,7 @@ var possible_pairs_root = function(main_socket) {
 		},
 		message_winners: function(message_name, data) {
 			console.log("winners: \t" + out.this_socket.id);
+			console.log("\t\t" + out.paired.id);
 			out.this_socket.emit(message_name, data);
 			out.paired.emit(message_name, data);
 		},
@@ -43,18 +44,29 @@ var possible_pairs_root = function(main_socket) {
 			console.log("\nquarter check")
 			out.message_pairs("quarter check 5", out.pairs.length);
 		},
+		// print_tables: function() {
+		// console.log(out.this_socket.pairing_data.table);
+		// for (var a = 0, max = out.pairs.length; a < max; ++a) {
+		// 	console.log(out.pairs[a].pairing_data.table);
+		// }
+		// },
 		check: function() {
-			console.log("\nfinal check\n\n")
-			console.log(out.this_socket.pairing_data.std); // OLD
-			//console.log(out.this_socket.pairing_data.std);
-			// console.log(out.this_socket.pairing_data.raw);
-			// console.log("main:\t" + out.this_socket.pairing_data.std[0] + " " + out.this_socket.pairing_data.std[1] + " " + out.this_socket.pairing_data.std[2]);
-			for (var a = 0, max = out.pairs.length; a < max; ++a) {
-				//console.log(out.pairs[a].pairing_data.raw); //FIX
-				// console.log(out.pairs[a].pairing_data.raw);
-				//console.log("out:\t" + out.pairs[a].pairing_data.std[0] + " " + out.pairs[a].pairing_data.std[1] + " " + out.pairs[a].pairing_data.std[2]);
-				out.paired = out.pairs[a]
+			console.log("\n\n\nfinal check")
+
+			console.log(out.this_socket.pairing_data);
+			out.paired = out.find_closests_std(out.this_socket.pairing_data.std, out.pairs);
+			// console.log("\t" + out.this_socket.id);
+			// for (var a = 0, max = out.pairs.length; a < max; ++a) {
+			// 	console.log("\t" + out.paired[a].id);
+			// 	// if (out.pairs[a].pairing_data) {
+			// 	// out.paired = out.pairs[a];
+			// 	// }
+			// }
+			if (!out.paired) {
+				return false;
 			}
+			console.log(out.this_socket.pairing_data.std)
+			console.log(out.paired.pairing_data.std)
 			if (out.pairs.length >= 1) {
 				out.message_winners("final check 7", {
 					"status": "success",
@@ -67,6 +79,26 @@ var possible_pairs_root = function(main_socket) {
 				out.message_pairs("final check 7", false);
 			}
 
+		},
+		find_closests_std: function(ref, list) {
+			var out = false,
+				min = 99999999,
+				loc = 0;
+
+			for (var a = 0, max = list.length; a < max; ++a) {
+				console.log(list[a].pairing_data)
+				loc = 0;
+				loc += Math.abs(ref[0] - list[a].pairing_data.std[0]);
+				loc += Math.abs(ref[1] - list[a].pairing_data.std[1]);
+				loc += Math.abs(ref[2] - list[a].pairing_data.std[2]);
+				console.log(list[a].id + " " + loc);
+				if (loc < min) {
+					min = loc;
+					out = list[a]
+				}
+			}
+			console.log("sum difference of: " + min + "\n");
+			return out;
 		}
 
 	};
@@ -98,6 +130,7 @@ var time = {
 					socket.possible_pairs = possible_pairs_root(socket);
 					for (var a = 0, max = time.point.length; a < max; ++a) {
 						if (time.point[a][1]["id"] != socket["id"]) {
+							// console.log("\n\nFOUND AN PAIR!!!\n\n" + socket.id + " and " + time.point[a][1].id + "\n\n")
 							socket.possible_pairs.pairs.push(time.point[a][1]);
 						} else {
 							time.point.splice(a, 1);
@@ -105,7 +138,6 @@ var time = {
 							max -= 1;
 						}
 					}
-					console.log("\ninitial pairing")
 					socket.possible_pairs.message_pairs("time paired 3", "worked!");
 				};
 				time.point.push([new Date().getTime(), socket]);
@@ -120,10 +152,16 @@ var time = {
 			};
 		});
 		socket.on('paired data 6', function(data) {
-			// console.log("\t\tfinal data")
-			// console.log(data["raw"]);
 			socket.pairing_data = data;
-			if (socket.possible_pairs) {
+			if (!socket.possible_pairs || !socket.possible_pairs.pairs) {
+				console.log("final check no pair " + socket.id);
+				return false;
+			}
+			if (socket.possible_pairs && socket.possible_pairs.pairs.length) {
+				console.log("\n\nfinalcheck");
+				// socket.possible_pairs.print_tables();
+				// console.log(socket.pairing_data.table);
+				// console.log(socket.possible_pairs.pairs[0].pairing_data.table);
 				socket.possible_pairs.check();
 			};
 		});

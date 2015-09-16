@@ -79,3 +79,10 @@ app.game.phase4 = {
 		$(document.body).removeClass().addClass("phase4 ");
 	}
 }
+
+app.game.phase5 = {
+	init: function(elements) {
+		$(document.body).removeClass().addClass("phase5 ");
+		console.log(elements);
+	}
+}
