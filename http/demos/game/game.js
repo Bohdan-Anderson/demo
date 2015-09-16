@@ -65,6 +65,7 @@ app.game.phase3 = {
 			app.socket.on("time paired 3", app.found_potential_pair);
 			app.socket.on("quarter check 5", app.quart_check);
 			app.socket.on("final check 7", app.final_check);
+			app.socket.on("stop", app.just_stop);
 			$("#pairing_button").click(app.clickButton);
 		}
 	}
@@ -84,5 +85,12 @@ app.game.phase5 = {
 	init: function(elements) {
 		$(document.body).removeClass().addClass("phase5 ");
 		console.log(elements);
+		$("#pairing_success").html(elements[0] + " " + elements[1]);
+		$("#paired_keep_playing").click(app.game.phase5.keep_playing);
+	},
+	keep_playing: function(event) {
+		event.preventDefault();
+		app.game.phase3.init();
+		return false;
 	}
 }

@@ -35,6 +35,7 @@ var app = {
 	when_not_paired: null,
 	wait: function(data) {
 		console.log("wait " + data);
+		app.record.time = data;
 		pr("wait " + data + " milliseconds");
 		app.record.init();
 		app.when_not_paired = window.setTimeout(function() {
@@ -54,20 +55,34 @@ var app = {
 	quart_check: function(data) {
 		pr("quater check possible " + data + " devices")
 	},
+
 	final_check: function(data) {
 		// TODO
-		pr("a result came back " + data.status);
-
-		if (data.status == "success") {
-			app.game.phase5.init(data.pairs);
-			console.log(data);
-			pr("a result came back success");
-		} else {
-			pr("a result came back negative");
-			// app.game.phase3.init("didn't find a pair");
+		if (app.data.state == "recording") {
+			pr("a result came back " + data.status);
+			if (data.status == "success") {
+				window.clearTimeout(app.wait_to_fail_obj);
+				app.game.phase5.init(data.pairs);
+				console.log(data);
+				pr("a result came back success");
+				app.data.state = "ready";
+			} else {
+				app.wait_to_fail_obj = window.setTimeout(app.wait_to_fail, app.record.time);
+				pr("wait to fail");
+			}
 		}
 		// pr("final check possible " + data + " devices")
+
+	},
+	wait_to_fail_obj: null,
+	wait_to_fail: function() {
+		pr("wait fail eneded");
 		app.data.state = "ready";
+		app.game.phase3.init("no one paired with you");
+	},
+	just_stop: function() {
+		app.record.stop();
+		app.game.phase3.init("warning JUST STOP");
 	}
 }
 
@@ -81,7 +96,7 @@ function pr(message) {
 
 
 app.record = {
-	// time: 8000,
+	time: 0,
 	points: 128,
 	interval_id: null,
 	data: {

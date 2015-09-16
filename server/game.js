@@ -8,12 +8,27 @@ var game = {
 
 
 
+var use_fake_sockets = true;
+var fakeSocket = function() {
+	var out = {
+		"pairing_data": {
+			"std": [Math.random(), Math.random(), Math.random()],
+			"table": "fake table",
+			"element": "human"
+		},
+		emit: function(x, y) {
+			// console.log("fake emmit: " + x + " " + y);
+		},
+		id: (Math.floor(Math.random() * 100) + " fake id for a fake socket")
+	}
+	return out;
+}
 
-
+// var fakeList = [fakeSocket(), fakeSocket(), fakeSocket()];
 var possible_pairs_root = function(main_socket) {
 	var out = {
 		this_socket: main_socket,
-		pairs: [],
+		pairs: [], //it should be that     fakeList, //
 		paired: null,
 		message_pairs: function(message_name, data) {
 			console.log("device: \t" + out.this_socket.id);
@@ -44,27 +59,26 @@ var possible_pairs_root = function(main_socket) {
 			console.log("\nquarter check")
 			out.message_pairs("quarter check 5", out.pairs.length);
 		},
-		// print_tables: function() {
-		// console.log(out.this_socket.pairing_data.table);
-		// for (var a = 0, max = out.pairs.length; a < max; ++a) {
-		// 	console.log(out.pairs[a].pairing_data.table);
-		// }
-		// },
-		check: function() {
-			console.log("\n\n\nfinal check")
 
-			console.log(out.this_socket.pairing_data);
-			out.paired = out.find_closests_std(out.this_socket.pairing_data, out.pairs);
-			// console.log("\t" + out.this_socket.id);
-			// for (var a = 0, max = out.pairs.length; a < max; ++a) {
-			// 	console.log("\t" + out.paired[a].id);
-			// 	// if (out.pairs[a].pairing_data) {
-			// 	// out.paired = out.pairs[a];
-			// 	// }
-			// }
+		check: function() {
+			console.log("\n\n\nfinal check " + out.this_socket);
+
+			out.paired = out.find_closests_std(out.this_socket, out.pairs, 0.26);
+
 			if (!out.paired) {
+				// out.this_socket.emit("final check 7", {
+				// 	"status": "failed"
+				// });
+
+				out.message_pairs("final check 7", {
+					"status": "failed"
+				});
+				// out.this_socket.pairing_data = null;
 				return false;
 			}
+
+			out.paired.pairing_data.taken = true;
+
 			console.log(out.this_socket.pairing_data.std)
 			console.log(out.paired.pairing_data.std)
 			if (out.pairs.length >= 1) {
@@ -75,26 +89,36 @@ var possible_pairs_root = function(main_socket) {
 				out.message_losers("final check 7", {
 					"status": "failed"
 				})
+				// out.this_socket.pairing_data = null;
 			} else {
+				console.log("\n\n\n SOMETHING WENT VERY WRONG \n\n\n");
 				out.message_pairs("final check 7", false);
 			}
 
 		},
-		find_closests_std: function(ref, list) {
+		find_closests_std: function(ref, list, limit) {
 			var out = false,
-				min = 99999999,
+				min = limit || 99999999,
 				loc = 0;
-			console.log(ref.table)
+
+			console.log("--\t" + ref.id)
+			// console.log(ref.pairing_data.table)
 			for (var a = 0, max = list.length; a < max; ++a) {
-				console.log(list[a].pairing_data.table)
-				loc = 0;
-				loc += Math.abs(ref.std[0] - list[a].pairing_data.std[0]);
-				loc += Math.abs(ref.std[1] - list[a].pairing_data.std[1]);
-				loc += Math.abs(ref.std[2] - list[a].pairing_data.std[2]);
-				console.log(list[a].id + " " + loc);
-				if (loc < min) {
-					min = loc;
-					out = list[a]
+
+
+				// console.log(list[a].pairing_data.table)
+				if (list[a].pairing_data && !list[a].pairing_data.taken && list[a].id != ref.id) {
+					loc = 0;
+					loc += Math.abs(ref.pairing_data.std[0] - list[a].pairing_data.std[0]);
+					loc += Math.abs(ref.pairing_data.std[1] - list[a].pairing_data.std[1]);
+					loc += Math.abs(ref.pairing_data.std[2] - list[a].pairing_data.std[2]);
+					console.log(list[a].id + " " + loc);
+					if (loc < min) {
+						min = loc;
+						out = list[a]
+					}
+				} else {
+					console.log(list[a].id + " no data")
 				}
 			}
 			console.log("sum difference of: " + min + "\n");
@@ -124,6 +148,7 @@ var time = {
 	connect: function(socket) {
 		socket.on('data', function(data) {
 			if (data.type == "tap message 1") {
+				socket.possible_pairs = null;
 				// we ask the client to wait till they are out of the time pairing zome
 				socket.emit("wait 2", time.time_size * 2);
 				if (time.point.length) {
@@ -139,6 +164,9 @@ var time = {
 						}
 					}
 					socket.possible_pairs.message_pairs("time paired 3", "worked!");
+				} else if (use_fake_sockets) {
+					socket.possible_pairs = possible_pairs_root(socket);
+					socket.possible_pairs.message_pairs("time paired 3", "worked!");
 				};
 				time.point.push([new Date().getTime(), socket]);
 			};
@@ -152,6 +180,9 @@ var time = {
 			};
 		});
 		socket.on('paired data 6', function(data) {
+			if (socket.pairing_data) {
+				socket.emit("stop", {});
+			};
 			socket.pairing_data = data;
 			if (!socket.possible_pairs || !socket.possible_pairs.pairs) {
 				console.log("final check no pair " + socket.id);
