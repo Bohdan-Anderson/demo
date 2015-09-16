@@ -22,7 +22,7 @@ var app = {
 	init: function() {
 		console.log("starting");
 		app.socket = io.connect(SETTINGS.ip);
-		setInterval(app.beat, 500);
+		setInterval(app.beat, 100);
 		window.addEventListener('deviceorientation', app.onOrientaionEvent, true);
 		app.target = $("#datafeed")
 		$("#wrapper").click(app.makeZero);
@@ -34,6 +34,8 @@ var app = {
 	makeZero: function() {
 
 		app.socket.emit("data", "- ZEROED -");
+
+		app.data.count = 0;
 
 		app.data.zero = {}
 
@@ -66,13 +68,24 @@ var app = {
 		radGamma = (Math.PI / 180) * (app.mapRange(app.data.gamma, -90, 90, 0, 360)); //gamma: [-90,90]
 		radGammaZ = (Math.PI / 180) * (app.data.zero.gamma - (app.mapRange(app.data.gamma, -90, 90, 0, 360))); //gamma: [-90,90]
 
-		app.data.alphaCurve = (Math.sin(radAlpha));
-		app.data.betaCurve = (Math.sin(radBeta));
-		app.data.gammaCurve = (Math.sin(radGamma));
+		app.data.alphaCurve = (Math.sin(radAlphaZ));
+		app.data.betaCurve = (Math.sin(radBetaZ));
+		app.data.gammaCurve = (Math.sin(radGammaZ));
 
-		app.data.count = app.data.count += 1;
+		app.data.count = app.data.count + 1;
 
-		if (app.data.count < 16) {
+		//app.socket.emit("data", socket.id);
+
+		var alphaOut = app.data.alphaCurve,
+			betaOut = app.data.betaCurve,
+			gammaOut = app.data.gammaCurve;
+
+		app.socket.emit("data", "smpData[" + app.data.count + "]={alpha:" + alphaOut.toFixed(17) + ",beta:" + betaOut.toFixed(17) + ",gamma:" + gammaOut.toFixed(17) + "};");
+
+
+		//app.data.count = app.data.count += 1;
+
+		/*if (app.data.count < 16) {
 			app.data.userArr[app.data.count] = {
 				alpha: Math.sin(radAlphaZ),
 				beta: Math.sin(radBetaZ),
@@ -86,7 +99,7 @@ var app = {
 
 		//app.socket.emit("data", app.data.userArr);
 
-		//app.socket.emit("data", Math.sin(radAlphaZ));
+		//app.socket.emit("data", Math.sin(radAlphaZ));*/
 
 		/*
 		app.data.movingAverage.alpha = (Math.abs(app.data.zeros.alpha-app.data.alpha) * 0.4) + (app.data.movingAverage.alpha * (1 - 0.4));
