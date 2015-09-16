@@ -54,7 +54,7 @@ var possible_pairs_root = function(main_socket) {
 			console.log("\n\n\nfinal check")
 
 			console.log(out.this_socket.pairing_data);
-			out.paired = out.find_closests_std(out.this_socket.pairing_data.std, out.pairs);
+			out.paired = out.find_closests_std(out.this_socket.pairing_data, out.pairs);
 			// console.log("\t" + out.this_socket.id);
 			// for (var a = 0, max = out.pairs.length; a < max; ++a) {
 			// 	console.log("\t" + out.paired[a].id);
@@ -84,13 +84,13 @@ var possible_pairs_root = function(main_socket) {
 			var out = false,
 				min = 99999999,
 				loc = 0;
-
+			console.log(ref.table)
 			for (var a = 0, max = list.length; a < max; ++a) {
-				console.log(list[a].pairing_data)
+				console.log(list[a].pairing_data.table)
 				loc = 0;
-				loc += Math.abs(ref[0] - list[a].pairing_data.std[0]);
-				loc += Math.abs(ref[1] - list[a].pairing_data.std[1]);
-				loc += Math.abs(ref[2] - list[a].pairing_data.std[2]);
+				loc += Math.abs(ref.std[0] - list[a].pairing_data.std[0]);
+				loc += Math.abs(ref.std[1] - list[a].pairing_data.std[1]);
+				loc += Math.abs(ref.std[2] - list[a].pairing_data.std[2]);
 				console.log(list[a].id + " " + loc);
 				if (loc < min) {
 					min = loc;
