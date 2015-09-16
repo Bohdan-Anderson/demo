@@ -1,7 +1,8 @@
 var app = {
 	data: {
 		"type": "tap message 1",
-		"state": "ready"
+		"state": "ready",
+		count: 0,
 	},
 	init: function() {
 		app.socket = io.connect(SETTINGS.ip);
@@ -62,7 +63,7 @@ function pr(message) {
 
 
 app.record = {
-	time: 8000,
+	time: 20000,
 	data: {
 		"raw": [],
 		"std": [null, null, null],
@@ -126,11 +127,18 @@ app.zero = {
 		rad_b = Math.sin(rad_b);
 		rad_g = Math.sin(rad_g);
 
+		//app.socket.emit("data", app.data.count);
+
+		app.data.count = app.data.count + 1;
+
+		var cntr = "[" + app.data.count + "]";
+
 		// return rad_a;
 		return {
-			"a": rad_a,
-			"b": rad_b,
-			"g": rad_g
+			"cnt": cntr,
+			"a": rad_a.toFixed(17),
+			"b": rad_b.toFixed(17),
+			"g": rad_g.toFixed(17)
 		}
 	}
 }

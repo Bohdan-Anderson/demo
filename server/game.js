@@ -32,11 +32,14 @@ var possible_pairs_root = function(main_socket) {
 		},
 		check: function() {
 			console.log("\nfinal check\n\n")
-			console.log(out.this_socket.pairing_data.std);
+			//console.log(out.this_socket.pairing_data.std); // OLD
+			//console.log(out.this_socket.pairing_data.std);
+			console.log(out.this_socket.pairing_data.raw);
 			// console.log("main:\t" + out.this_socket.pairing_data.std[0] + " " + out.this_socket.pairing_data.std[1] + " " + out.this_socket.pairing_data.std[2]);
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
-				console.log(out.pairs[a].pairing_data.std);
-				// console.log("out:\t" + out.pairs[a].pairing_data.std[0] + " " + out.pairs[a].pairing_data.std[1] + " " + out.pairs[a].pairing_data.std[2]);
+				//console.log(out.pairs[a].pairing_data.raw); //FIX
+				console.log(out.pairs[a].pairing_data.raw);
+				//console.log("out:\t" + out.pairs[a].pairing_data.std[0] + " " + out.pairs[a].pairing_data.std[1] + " " + out.pairs[a].pairing_data.std[2]);
 			}
 			out.message_pairs("final check 7", out.pairs.length);
 
