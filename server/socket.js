@@ -15,7 +15,7 @@ var websocket = {
 				socket.on('data', function(data) {
 					data.id = socket.id;
 					//console.log(data["type"]); // Bohdan!!!!!!!!!!!!!
-					console.log(data);
+					// console.log(data);
 					websocket.io.emit("reciver", data);
 				});
 
@@ -28,7 +28,7 @@ var websocket = {
 				});
 
 				socket.on("moc_pair", function(data) {
-					console.log("moc_pair " + data.type);
+					// console.log("moc_pair " + data.type);
 					data.id = socket.id;
 					websocket.io.emit("reciver", data);
 					websocket.io.emit(("pairing_" + data.type), data)

@@ -34,7 +34,7 @@ var app = {
 	},
 	when_not_paired: null,
 	wait: function(data) {
-		console.log(data);
+		console.log("wait " + data);
 		pr("wait " + data + " milliseconds");
 		app.record.init();
 		app.when_not_paired = window.setTimeout(function() {
@@ -48,18 +48,25 @@ var app = {
 		window.clearTimeout(app.when_not_paired);
 		$(document.body).addClass("tracking_motion");
 		app.data.state = "recording";
+		console.log("found potential pair");
 		pr("found potential pair");
 	},
 	quart_check: function(data) {
 		pr("quater check possible " + data + " devices")
 	},
 	final_check: function(data) {
+		// TODO
+		pr("a result came back " + data.status);
+
 		if (data.status == "success") {
-
+			app.game.phase5.init(data.pairs);
+			console.log(data);
+			pr("a result came back success");
 		} else {
-
+			pr("a result came back negative");
+			// app.game.phase3.init("didn't find a pair");
 		}
-		pr("final check possible " + data + " devices")
+		// pr("final check possible " + data + " devices")
 		app.data.state = "ready";
 	}
 }
@@ -74,57 +81,66 @@ function pr(message) {
 
 
 app.record = {
-	time: 8000,
+	// time: 8000,
+	points: 128,
+	interval_id: null,
 	data: {
 		"raw": [],
 		"std": [null, null, null],
 		"std_quart": [null, null, null]
 	},
+	data_temp: [0, 0, 0],
 	init: function() {
-		// alert("starting to redcord");
-		// app.record.beat_interval_object = setInterval(app.record.beat);
+		app.record.interval_id = setInterval(app.record.beat, 70);
 		window.addEventListener('deviceorientation', app.record.on_orientaion_event, true);
-		app.record.message_quart_object = window.setTimeout(app.record.message_quart, app.record.time / 4);
-		app.record.message_object = window.setTimeout(app.record.message, app.record.time);
+	},
+	beat: function(event) {
+		console.log(app.record.data.raw.length);
+		if (app.record.data.raw.length < app.record.points) {
+			app.record.data.raw.push(app.zero.make(app.record.data_temp[0], app.record.data_temp[1], app.record.data_temp[2]));
+		} else {
+			app.record.final_message();
+		}
 	},
 	on_orientaion_event: function(event) {
-		var now = new Date();
-		if (!app.record.previous && (now - app.record.previous < 100)) {
-			return false;
-		}
-		if (!app.record.previous) {
+		if (!app.zero.d) {
 			app.zero.d = {
 				"a": event.alpha,
 				"b": event.beta,
 				"g": event.gamma
 			}
 		}
-		app.record.previous = now;
-
-		app.record.data.raw.push(app.zero.make(event.alpha, event.beta, event.gamma));
+		app.record.data_temp = [event.alpha, event.beta, event.gamma]
 	},
-	message_quart_object: null,
 	message_quart: function() {
-		console.log(app.record.data);
 		app.record.data.std_quart = app.std_math.init();
 		app.record.data.element = app.data.element;
 		app.socket.emit("paired data 4", app.record.data);
 	},
-	message_object: null,
-	message: function() {
+	final_message: function() {
 		app.record.data.std = app.std_math.init();
 		app.record.data.element = app.data.element;
+		// console.log(app.record.data);
+		var outa = "";
+		for (var a = 0, max = app.record.data.raw.length; a < max; ++a) {
+			outa += "\n" + app.record.data.raw[a].a + "\t" + app.record.data.raw[a].b + "\t" + app.record.data.raw[a].g + "\t"
+		}
+		app.record.data.table = outa;
+		app.record.data.raw = [];
+		console.log(app.record.data);
 		app.socket.emit("paired data 6", app.record.data);
 		app.record.stop();
 	},
 	stop: function() {
-		window.removeEventListener('deviceorientation', app.record.on_orientaion_event, true);
+		clearInterval(app.record.interval_id);
+		// window.removeEventListener('deviceorientation', app.record.on_orientaion_event, true);
 		app.record.data = {
 			"raw": [],
 			"std": [null, null, null],
 			"std_quart": [null, null, null]
 		};
-		app.record.previous = null;
+		app.zero.d = null;
+		app.record.data_temp = [0, 0, 0];
 	}
 }
 
@@ -166,7 +182,6 @@ app.std_math = {
 		};
 		app.std_math.mean();
 		app.std_math.variance()
-		console.log(app.std_math.d);
 		return [Math.sqrt(app.std_math.d.variation.a), Math.sqrt(app.std_math.d.variation.b), Math.sqrt(app.std_math.d.variation.g)];
 	},
 	mean: function() {
