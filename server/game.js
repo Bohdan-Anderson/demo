@@ -45,7 +45,7 @@ var possible_pairs_root = function(main_socket) {
 		},
 		check: function() {
 			console.log("\nfinal check\n\n")
-			//console.log(out.this_socket.pairing_data.std); // OLD
+			console.log(out.this_socket.pairing_data.std); // OLD
 			//console.log(out.this_socket.pairing_data.std);
 			// console.log(out.this_socket.pairing_data.raw);
 			// console.log("main:\t" + out.this_socket.pairing_data.std[0] + " " + out.this_socket.pairing_data.std[1] + " " + out.this_socket.pairing_data.std[2]);
