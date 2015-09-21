@@ -10,7 +10,7 @@
 
 
 	<link rel="stylesheet" href="/assets/css/main.min.css"/>
-	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'> -->
 
 </head>
 
@@ -87,12 +87,16 @@
 				and their image is now the merging icon and they are promted to
 				look up at the screen.
 			 -->
-			<div id="pairing_success_icon"></div>
-			<p id="pairing_success"></p>
+			<div class="center_w_table">
+				<div>
+					<div id="pairing_success_icon"></div>
+					<p id="pairing_success"></p>
+					<button id="paired_keep_playing">keep playing</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="jsmessage"></div>
-
 	<script type="text/javascript" src="/assets/js/lib/jquery-1.9.0.js"></script>
 	<script type="text/javascript" src="/assets/js/lib/js.cookie.js"></script>
 	<script type="text/javascript" src="/assets/js/lib/screenfull.min.js"></script>
@@ -100,8 +104,11 @@
 	<script type="text/javascript" src="/assets/js/settings.js"></script>
 	<script type="text/javascript" src="main.js"></script>
 	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript" src="record.js"></script>
+	<script type="text/javascript" src="calc.js"></script>
+	<script type="text/javascript" src="pairing.js"></script>
 	<script type="text/javascript">
-		app.init();
+		APP.init();
 	</script>
 </body>
 </html>
