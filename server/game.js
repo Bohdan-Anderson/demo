@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var game = {
 	io: null,
 	init: function(socket) {
@@ -31,19 +33,53 @@ var possible_pairs_root = function(main_socket) {
 		this_socket: main_socket,
 		pairs: [], //it should be that     fakeList, //
 		paired: null,
+		user_data: null,
 		check: function() {
 			if (!out.pairs.length) {
 				return false;
 			}
+
 			var msg = out.this_socket.id + "<br>";
+
+			var ud = out.user_data, // user data
+				cd = null, //current data
+				g_sum = 99,
+				sum_winner = null,
+				g_std = null,
+				std_winner = null;
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
-				msg += out.pairs[a].id + "<br>";
+				cd = out.pairs[a].possible_pairs.user_data;
+
+				loc_sum = Math.abs(ud.sum[0] - cd.sum[0]) + Math.abs(ud.sum[1] - cd.sum[1]) + Math.abs(ud.sum[2] - cd.sum[2])
+				if (loc_sum < g_sum) {
+					g_sum = loc_sum;
+					sum_winner = out.pairs[a];
+				}
+
+				loc_sum = Math.abs(ud.sum[0] - cd.sum[0]) + Math.abs(ud.sum[1] - cd.sum[1]) + Math.abs(ud.sum[2] - cd.sum[2])
+				if (loc_sum < g_sum) {
+					g_sum = loc_sum;
+					sum_winner = out.pairs[a];
+				}
+
+
+
+				msg += cd.id + "<br>";
+
 			}
 
+			var time = String(new Date().getTime())
+			write_data(out.user_data, time, out.this_socket.id, out.this_socket.handshake.headers["user-agent"]);
+			out.this_socket.emit("paired", msg)
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
 				out.pairs[a].emit("paired", msg)
+				write_data(
+					out.pairs[a].possible_pairs.user_data,
+					time,
+					out.pairs[a].id,
+					out.pairs[a].handshake.headers["user-agent"])
 			}
-			out.this_socket.emit("paired", msg)
+
 		}
 		// message_pairs: function(message_name, data) {
 		// 	console.log("device: \t" + out.this_socket.id);
@@ -180,6 +216,7 @@ var time = {
 		socket.on('join queue', function(data) {
 			console.log("\t\t" + socket.id + " joined queue")
 			socket.emit("joined queue", time.time_size);
+			socket.messaged_to_continue = false;
 			socket.possible_pairs = possible_pairs_root(socket);
 
 			if (time.point.length) {
@@ -209,6 +246,7 @@ var time = {
 
 		socket.on('recording finished', function(data) {
 			console.log("\t" + socket.id + " sent final data");
+			socket.possible_pairs.user_data = data;
 			socket.possible_pairs.check();
 		});
 	},
@@ -231,5 +269,49 @@ var time = {
 		}
 	}
 }
+
+
+
+
+
+function isNumeric(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+var write_data_parse = function(data) {
+	var out = "";
+	// iterate if it's an array
+	if (data != null && typeof(data) == "object" && data.length) {
+		for (var a = 0, max = data.length; a < max; ++a) {
+			out += "\t" + write_data_parse(data[a]);
+		}
+		out += "\n";
+	} else if (typeof(data) == "object") {
+		// iterate if it's an object
+
+		for (var key in data) {
+			out += "\n " + key;
+			out += "\n" + write_data_parse(data[key]);
+		}
+	} else {
+		// return if it's a string	
+		if (isNumeric(data)) {
+			data = Math.floor(data * 10000) / 10000;
+		}
+		out = data;
+	}
+	return out;
+}
+
+var write_data = function(data, time, id, headers) {
+	if (!fs.existsSync("data/" + time)) {
+		fs.mkdirSync("data/" + time);
+	}
+	fs.writeFile("data/" + time + "/" + String(id), headers + "\n" + write_data_parse(data), function(err) {
+		if (err) return console.log(err);
+		console.log(id);
+	});
+}
+
 
 exports.game = game;

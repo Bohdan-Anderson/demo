@@ -72,86 +72,6 @@ answer wait > times out
 */
 
 
-var REC = {
-	D: {
-
-	},
-	ec: 80, //enc count
-	temp: null,
-	zero: null,
-	raw: null
-};
-
-// start beat
-// start phone moves updater
-// clear the data
-REC.start = function() {
-	REC.temp = null;
-	REC.zero = null;
-	REC.raw = null;
-	console.log("start recording");
-	window.addEventListener('deviceorientation', REC.phone_moves_updater, true);
-	REC.beat_holder = setInterval(REC.beat, 70);
-};
-
-REC.phone_moves_updater = function(event) {
-	if (!REC.zero) {
-		REC.zero = [event.alpha, event.beta, event.gamma]
-	}
-
-	REC.temp = [event.alpha, event.beta, event.gamma]
-}
-
-// records the current phones location from the temp move
-REC.beat_holder = null;
-REC.beat_writen = 10;
-REC.beat = function() {
-	if (REC.temp) {
-		if (!REC.raw) {
-			REC.raw = [REC.temp];
-		} else {
-			REC.beat_print();
-			REC.raw.push(REC.temp);
-		}
-		if (REC.raw.length > REC.ec) {
-			REC.stop();
-		}
-	}
-};
-
-// print's to the 10th percent of current beatage
-REC.beat_print = function() {
-	var w = Math.floor(REC.raw.length / REC.ec * 10);
-	if (w != REC.beat_writen) {
-		REC.beat_writen = w;
-		console.log(w + "0%");
-	}
-}
-
-// send data to server
-// stop beat
-// stop phone moves updater
-// reset zero
-REC.stop = function() {
-	console.log("stoped beat");
-	window.removeEventListener('deviceorientation', REC.phone_moves_updater, true);
-	clearInterval(REC.beat_holder);
-
-	PAIR.OUT.finished_recording(REC.raw)
-
-}
-
-REC.stop_failed = function() {
-	console.log("stoped beat by fail");
-	window.removeEventListener('deviceorientation', REC.phone_moves_updater, true);
-	clearInterval(REC.beat_holder);
-}
-
-
-
-
-
-
 
 
 
@@ -197,6 +117,7 @@ PAIR.IN.continue_to_record = function(data) {
 PAIR.OUT.finished_recording = function(data) {
 	console.log("sending this data...")
 	// console.log(data)
+	APP.print_data(data);
 	PAIR.socket.emit("recording finished", data)
 	PAIR.WAIT.in_data_queue_holder = window.setTimeout(PAIR.WAIT.in_data_queue, PAIR.D.wait_time * 3);
 };
