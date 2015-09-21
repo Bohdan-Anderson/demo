@@ -15,7 +15,7 @@ var websocket = {
 				socket.on('data', function(data) {
 					data.id = socket.id;
 					//console.log(data["type"]); // Bohdan!!!!!!!!!!!!!
-					// console.log(data);
+					console.log(data); //NEW TEMP Remove later
 					websocket.io.emit("reciver", data);
 				});
 

@@ -123,7 +123,8 @@ app.record = {
 		// console.log(app.record.data);
 		var outa = "";
 		for (var a = 0, max = app.record.data.raw.length; a < max; ++a) {
-			outa += "\n" + a + "\t" + app.record.data.raw[a].a + "\t" + app.record.data.raw[a].b + "\t" + app.record.data.raw[a].g + "\t"
+			//outa += "\n" + a + "\t" + app.record.data.raw[a].a + "\t" + app.record.data.raw[a].b + "\t" + app.record.data.raw[a].g + "\t"
+			outa += "app.data.smpData[" + a + "]={alpha:" + app.record.data.raw[a].a + ",beta:" + app.record.data.raw[a].b + ",gamma:" + app.record.data.raw[a].g + "}"
 		}
 		app.record.data.table = outa;
 		app.record.data.raw = [];
