@@ -41,20 +41,33 @@ module.exports = function(grunt) {
 		// 		}
 		// 	}
 		// },
+		nodemon: {
+			script: 'main.js',
+			options: {
+				ignore: ['http/**']
+			}
+		},
+
 		watch: {
 			css: {
 				files: ['**/*.scss'],
 				tasks: ['sass', 'cssmin'] //
 			},
+			node: {
+				files: ['main.js', 'server/*.js'],
+				tasks: ['nodemon']
+			}
 			// js: {
 			// 	// files: 'application/static/js/main.js',
 			// 	// tasks: ['uglify']
 			// }
 		}
 	});
+	grunt.loadNpmTasks('grunt-nodemon');
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.registerTask('default', ['watch']);
+	grunt.registerTask('node', ['nodemon'])
 };

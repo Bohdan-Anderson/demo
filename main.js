@@ -12,7 +12,7 @@ var app = {
 	}
 };
 
-http = require('./server/http').http;
-socket = require('./server/socket').socket;
-game = require('./server/game').game;
+var http = require('./server/http').http,
+	socket = require('./server/socket').socket,
+	game = require('./server/game').game;
 app.init();
