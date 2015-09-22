@@ -35,7 +35,7 @@ var OBJ = function(main_socket) {
 
 			var winner = out.find_matches();
 			// message the winners
-			if(winner){
+			if (winner) {
 				out.this_socket.emit("paired", msg)
 				winner.emit("paired", msg)
 			}
@@ -62,7 +62,7 @@ var OBJ = function(main_socket) {
 				cd = null, //current data
 				// (compaired against, list of the pairs, minimun for winner, weight)
 				std_winner = CALC.standard_deviation(out, out.pairs, 0.5, 1),
-				agr_winner = CALC.slope_aggression(out, out.pairs, 0.5, 1),
+				agr_winner = CALC.slope_aggression(out, out.pairs, 0.4, 1),
 				sum_winner = CALC.sum(out, out.pairs, 50, 2);
 
 			console.log("\n\nWinner...");
