@@ -85,6 +85,9 @@ PAIR.OUT.joining_queue = function(event) {
 	PAIR.socket.emit("join queue", PAIR.D)
 	REC.start();
 	GAME.phase4.init();
+	if (APP.fullscreen && screenfull.enabled) {
+		screenfull.request();
+	}
 };
 
 // we geing the in tap que

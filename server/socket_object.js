@@ -1,5 +1,6 @@
 var write_data = require('./write_data').write_data;
 var CALC = require('./calc').CALC;
+var UNITY = require('./to_unity').UNITY;
 
 
 var fake_socket_data = function() {
@@ -25,8 +26,9 @@ var OBJ = function(main_socket) {
 		pairs: [], //it should be that     fakeList, //
 		paired: null,
 		user_data: null,
-		check: function() {
-			if (!out.pairs.length) {
+		check: function(websocket) {
+			if (!out.pairs.length || out.this_socket.has_been_sent_win_message) {
+				write_data(out.user_data, time, out.this_socket.id, out.this_socket.handshake.headers["user-agent"]);
 				return false;
 			}
 
@@ -36,8 +38,11 @@ var OBJ = function(main_socket) {
 			var winner = out.find_matches();
 			// message the winners
 			if (winner) {
+				winner.has_been_sent_win_message = true;
+				out.this_socket.has_been_sent_win_message = true;
 				out.this_socket.emit("paired", msg)
 				winner.emit("paired", msg)
+				UNITY.msg(websocket, winner.possible_pairs.user_data.element, out.user_data.element);
 			}
 
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
@@ -46,7 +51,7 @@ var OBJ = function(main_socket) {
 			}
 
 			var time = String(new Date().getTime())
-			console.log(out.this_socket.id);
+				// console.log(out.this_socket.id);
 			write_data(out.user_data, time, out.this_socket.id, out.this_socket.handshake.headers["user-agent"]);
 
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
@@ -67,7 +72,7 @@ var OBJ = function(main_socket) {
 
 			console.log("\n\nWinner...");
 
-			var winner = CALC.greatest_weighed(out.pairs, out.this_socket.id);
+			var winner = CALC.greatest_weighed(out.pairs, out.this_socket.id, 4);
 			if (winner) {
 				console.log(winner.id);
 			}

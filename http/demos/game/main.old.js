@@ -42,7 +42,6 @@ var app = {
 			app.data.state = "ready"
 			app.game.phase3.init("no_other_clicks");
 			pr("");
-			// pr("you can try to send again, no one click close in time to you");
 		}, data);
 	},
 	found_potential_pair: function(data) {

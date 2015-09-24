@@ -1,4 +1,5 @@
 var APP = {
+	// fullscreen: true,
 	init: function() {
 		GAME.init();
 	},

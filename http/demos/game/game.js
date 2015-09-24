@@ -23,6 +23,9 @@ GAME.phase1 = {
 	},
 	next_phase: function(event) {
 		event.preventDefault();
+		if (APP.fullscreen && screenfull.enabled) {
+			screenfull.request();
+		}
 		if (screenfull.enabled && GAME.fullscreen == true) {
 			screenfull.request();
 		}

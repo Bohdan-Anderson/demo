@@ -28,7 +28,8 @@ var time = {
 		socket.on('join queue', function(data) {
 			console.log("\t\t" + socket.id + " joined queue")
 			socket.emit("joined queue", time.time_size);
-			socket.messaged_to_continue = false;
+			socket.has_been_sent_win_message = false; // don't win multiple times
+			socket.messaged_to_continue = false; // don't send multiple pairing possibilities
 			socket.weights = {};
 			socket.possible_pairs = socket_object(socket);
 
@@ -57,7 +58,7 @@ var time = {
 		socket.on('recording finished', function(data) {
 			console.log("\t" + socket.id + " sent final data");
 			socket.possible_pairs.user_data = data;
-			socket.possible_pairs.check();
+			socket.possible_pairs.check(game.io);
 		});
 	},
 

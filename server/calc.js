@@ -27,6 +27,9 @@ CALC.standard_deviation = function(main, list, min_variance, weight) {
 		temp = null,
 		min_variance = min_variance;
 	for (var a = 0; a < length; a++) {
+		if (list[a].has_been_sent_win_message || !list[a].possible_pairs.user_data) {
+			continue;
+		}
 		cd = list[a].possible_pairs.user_data.standard_deviation.standard_deviation;
 		temp = Math.abs(ud[0] - cd[0]);
 		temp += Math.abs(ud[1] - cd[1]);
@@ -58,6 +61,9 @@ CALC.slope_aggression = function(main, list, min_variance, weight) {
 		temp = null,
 		min_variance = min_variance;
 	for (var a = 0; a < length; a++) {
+		if (list[a].has_been_sent_win_message) {
+			continue;
+		}
 		cd = list[a].possible_pairs.user_data.slope_aggression;
 		temp = Math.abs(ud[0] - cd[0]);
 		temp += Math.abs(ud[1] - cd[1]);
@@ -88,6 +94,9 @@ CALC.sum = function(main, list, min_variance, weight) {
 		temp = null,
 		min_variance = min_variance;
 	for (var a = 0; a < length; a++) {
+		if (list[a].has_been_sent_win_message) {
+			continue;
+		}
 		cd = list[a].possible_pairs.user_data.sum;
 		temp = Math.abs(ud[0] - cd[0]);
 		temp += Math.abs(ud[1] - cd[1]);
@@ -102,7 +111,14 @@ CALC.sum = function(main, list, min_variance, weight) {
 	return winner;
 }
 
-CALC.greatest_weighed = function(list, id) {
+
+// out
+// either a socket or null
+// input
+// list of all the sockets
+// id of the current element > we use it to retrive the weight value of each socket
+// total is what the grand total is weighed out of
+CALC.greatest_weighed = function(list, id, total) {
 	if (typeof(list) !== "object" && !list.length) {
 		console.log("\n\nA list was not passed to SUM\n\n");
 		return null;
@@ -117,6 +133,12 @@ CALC.greatest_weighed = function(list, id) {
 			g = list[a].weights[id];
 			out = list[a]
 		}
+	}
+
+	// we test to see if the winner is stronger than half the tests
+	if (g > total / 2) {
+		console.log("winner Weight: " + g);
+		return out
 	}
 	return out;
 }
