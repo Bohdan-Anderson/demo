@@ -140,7 +140,7 @@ CALC.greatest_weighed = function(list, id, total) {
 		console.log("winner Weight: " + g);
 		return out
 	}
-	return out;
+	return null;
 }
 
 

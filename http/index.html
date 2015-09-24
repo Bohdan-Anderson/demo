@@ -2,177 +2,117 @@
 <html>
 <head>
 	<title>Demos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="mobile-web-app-capable" content="yes">
 
 
-	<link rel="stylesheet" href="/assets/css/style.min.css"/>
-	<link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/assets/css/main.min.css"/>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'> -->
+
 </head>
-<body class="home">
+
+<body class="phase4">
 	<div id="wrapper">
-		<h1>OUTPUTS</h1>
-		<ul class="mainlist">
-			<li>
-				<a href="/demos/button">button</a>
-				<p>
-					Button on the screen, which you touch, and a message is sent <br>
-					need to add button down vs button up (maybe make this a new view)
-				</p>
-				<p class="outputs">
-					event<br>
-					time stamp <br>
-					colour
-				</p>
-			</li>
-			<li>
-				<a href="/demos/tap">tap</a>
-				<p>
-					When the phone's momentum come to a sudden stop/start it triggers this event
-				</p>
-				<p class="outputs">
-					event<br>
-					current average of movement on phone
-				</p>
-			</li>
-			<li>
-				<a href="/demos/sway">sway</a>
-				<p>
-					constant feed of the user's sway percentage <br>
-					the max and min slowly come back to the users position again to give a dynamci sway <br>
-					this can be seen when the phone is left on the table, it will beggin to flip back and forth between black and white, max and min
-				</p>
-				<p class="outputs">
-					event<br>
-					current percentage of z axis
-				</p>
-			</li>
-<!-- 			<li>
-				<a href="/demos/zero">zero</a>
-				<p>
-					constant feed of the user's rotation <br>
-					when the user taps the screen that becomes the zero location <br>
-					keep in mind, up is not taken into account when this is being created, so the number text might some times be upsidedown
-				</p>
-				<p class="outputs">
-					event<br>
-					current rotaion from relative zero
-				</p>
-			</li> -->
-			<li>
-				<a href="/demos/newzero">New Zero</a>
-				<p>
-					Acts as the tare feature of a scale, setting all existing Alpha Beta Gamma values to 0. On movement all values are degrees from 0.
-				</p>
-				<p class="outputs">
-					<!-- event<br>
-					current rotaion from relative zero -->
-				</p>
-			</li>
-			<li>
-				<a href="/demos/mocpairing">Moc data for Unity</a>
-				<p>
-					send moc data to unity<br>
-					each will be sent with different names <br>
-					unity will catch the names and exicute the appropiate functions.
-				</p>
-				<p class="outputs">
-					out puts moc_pair<br>
-					with type refering to the moc data
-				</p>
-			</li>			
-			<li>
-				<a href="/demos/alldata">alldata</a>
-				<p>
-					Every 200ms it sends an update of the phones status <br>
-					The data is basically the same for both of these inputs <br>
-					Devicemotion was only sending acceleration Including Gravity
-				</p>
-				<img src="/assets/img/axes.png">
+		<div id="phase1">
+			<!-- preamble -->
+			<!-- 
+				we need text and some dialog 
+				talking about what people are 
+				about to do.
 
-				<p class="outputs">
-					event<br>
-					orientation <br>
-					deviceorientation absolute <br>
-					deviceorientation gamma <br>
-					deviceorientation alpha <br>
-					deviceorientation beta <br>
-					devicemotion acceleration x,y,z <br>
-					devicemotion acceleration Including Gravity x,y,z <br>
-					devicemotion rotation x,y,z <br>
-					devicemotion interval <br>
-				</p>
-			</li>
-		</ul>
+				If they have a cookie we skip this step
+			-->
+			<div class="center_w_table">
+				<div>
+					<h2>Preamble</h2>
+					<p>The text refering to the preamble :D</p>
+					<button id="user_to_phase2">Continue</button>
+				</div>
+			</div>
+		</div><div id="phase2">
+			<!-- set player type -->
+			<!-- 
+				give the player a randomized
+				list of player types.
+				They click a type, it goes big
+				then it is stored as a cookie.
 
-		<h1>INPUTS</h1>
-		<ul class="mainlist">
-			<li>
-				<a href="/recivers/findYourButton">Find your button</a>
-				<p>Find the button that you are pressing</p>
-				<p class="outputs">
-					Variable difficulties <br>
-					Colour is feed by the button <br>
-					Number of buttons
-				</p>
-			</li>
-			<li>
-				<a href="/recivers/reciver">Reciver</a>
-				<p>Any data feed to it, displays as a list each variable</p>
-				<p class="outputs">
-				</p>
-			</li>
-<!-- 			<li>
-				<a href="/recivers/recivergraph">Reciver Graph</a>
-				<p>In Dev...</p>
-				<p class="outputs">
-				</p>
-			</li> -->
-<!-- 			<li>
-				<a href="/recivers/pairing">Pairing</a>
-				<p>In Dev...</p>
-				<p class="outputs">
-				</p>
-			</li> -->
-		</ul>
-
-		<h1>Pairings</h1>
-		<ul class="mainlist">
-			<li>
-				<a href="/demos/timepair">Time Pair</a>
-				<p>
-					First example of pairing via time, who ever taps closest in time to each other they get paired. The server set the time and socket into an array and then waits for the next call to pair it. <br>
-					Sends a message with data type <code>tap demo start pair</code>
-				</p>
-				<p class="outputs">
-					replies to the other devices and self on pairing with <code>tap demo paired</code>
-					<!-- event<br>
-					current rotaion from relative zero -->
-				</p>
-			</li>
-			<li>
-				<a href="/demos/game">Game!!!</a>
-				<p>
-					Pairing for the game.
-					<!-- First example of pairing via time, who ever taps closest in time to each other they get paired. The server set the time and socket into an array and then waits for the next call to pair it. <br>
-					Sends a message with data type <code>tap demo start pair</code> -->
-				</p>
-				<p class="outputs">
-					<!-- replies to the other devices and self on pairing with <code>tap demo paired</code> -->
-					<!-- event<br>
-					current rotaion from relative zero -->
-				</p>
-			</li>
-		</ul>
-
-		<div class="notes">
-			<ul>
-				<li><h2>notes</h2></li>
-				<li>Use non selectable text, make it when you thouch the screen by mistake better <a href="http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting"> link</a></li>
-			</ul>
+				If they have a cookie we skip this step.
+			-->
+			<div class="center_w_table">
+				<div>
+					<ul id="user_choose_type">
+						<li><a href="#human" alt="human">human</a></li><li>
+						<a href="#wave" alt="wave">wave</a></li><li>
+						<a href="#water" alt="water">water</a></li><li>
+						<a href="#celluar" alt="celluar">celluar</a></li>
+					</ul>
+				</div>
+			</div>
+		</div><div id="phase3">
+			<!-- explain what you are -->
+			<!-- 
+				Explain who they are playing as
+				what does it mean that you choose this type?
+				There is a button for them to start pairing...
+				this is the main focus of the page
+			 -->
+			<div class="center_w_table">
+				<div>
+					<div class="user_icon"></div>
+					<button id="pairing_button">PAIR</button>
+				</div>
+			</div>
+			<div class="error">
+				you can try to send again, no one click close in time to you
+			</div>
+		</div><div id="phase4">
+			<!-- being pairing state -->
+			<!-- 
+				they have begun to pair with some one.
+				they recive all the possibilites of people they have begun to pair with
+			 -->
+			<div class="center_w_table">
+				<div>
+					<div class="center_icon_change"></div>
+				</div>
+			</div>
+		</div><div id="phase5">
+			<!-- visaul outcome -->
+			<!-- 
+				recives a message that they did pair with some one
+				and their image is now the merging icon and they are promted to
+				look up at the screen.
+			 -->
+			<div class="center_w_table">
+				<div>
+					<div id="pairing_success_icon"></div>
+					<p id="pairing_success"></p>
+					<button id="paired_keep_playing">keep playing</button>
+				</div>
+			</div>
 		</div>
 	</div>
+	<div id="jsmessage"></div>
+	<script type="text/javascript" src="/assets/js/lib/jquery-1.9.0.js"></script>
+	<script type="text/javascript" src="/assets/js/lib/js.cookie.js"></script>
+	<script type="text/javascript" src="/assets/js/lib/screenfull.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="/assets/js/main.js"></script>
+	<script type="text/javascript" src="/assets/js/game.js"></script>
+	<script type="text/javascript" src="/assets/js/record.js"></script>
+	<script type="text/javascript" src="/assets/js/calc.js"></script>
+	<script type="text/javascript" src="/assets/js/pairing.js"></script>
+	<script type="text/javascript">
+		APP.init();
+		window.addEventListener("load", function(){
+			setTimeout(function(){ 
+				window.scrollTo(0, 1); 
+			}, 100 );
+		});
+	</script>
 </body>
 </html>
