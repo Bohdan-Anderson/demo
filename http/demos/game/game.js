@@ -53,6 +53,7 @@ GAME.phase3 = {
 		PAIR.init();
 		if (!PAIR.D.element) {
 			GAME.phase2.init();
+			$(document.body).removeClass("button_pair");
 			return false;
 		}
 		if (!error) {

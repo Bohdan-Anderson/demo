@@ -22,8 +22,8 @@ html, body {
   -ms-user-select: none;
   user-select: none;
   text-align: center;
-  background-color: #222222;
-  color: white; }
+  background-color: #222;
+  color: #fff; }
 
 ul, li {
   list-style: none;
@@ -64,8 +64,8 @@ a {
   display: block; }
 
 button, .center_icon_change {
-  background-color: #222222;
-  border: 2px solid white;
+  background-color: #222;
+  border: 2px solid #fff;
   width: 5rem;
   height: 5rem;
   border-radius: 100%;
@@ -74,12 +74,9 @@ button, .center_icon_change {
   font-family: inherit;
   font-weight: inherit; }
   button:active, .center_icon_change:active, button:focus, .center_icon_change:focus {
-    background-color: white;
-    color: #222222;
+    background-color: #fff;
+    color: #222;
     outline: none; }
-
-h1, h2, h3 {
-  text-transform: uppercase; }
 
 .center_w_table {
   display: table;
@@ -106,8 +103,11 @@ h1, h2, h3 {
     display: inline-table; }
     #user_choose_type li a {
       display: table-cell;
-      padding: 3rem;
+      padding: 2rem;
       vertical-align: middle; }
+  #user_choose_type img {
+    width: 4em;
+    height: auto; }
 
 .error {
   display: none;
@@ -122,7 +122,21 @@ h1, h2, h3 {
 .center_icon_change {
   margin: 0 auto; }
   .center_icon_change:active, .center_icon_change:focus {
-    background-color: #222222; }
+    background-color: #222; }
 
 .tracking_motion {
   background-color: #f0c; }
+
+.help {
+  background-color: #444;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 2em;
+  height: 2em;
+  border: 1px solid #fff; }
+
+.hidden {
+  display: none; }
+
+/*# sourceMappingURL=main.css.map */

@@ -1,5 +1,5 @@
 var REC = {
-	ec: 80, //enc count
+	ec: 256, //resolution of data
 	temp: null,
 	zero: null,
 	raw: null
@@ -14,7 +14,7 @@ REC.start = function() {
 	REC.raw = null;
 	console.log("start recording");
 	window.addEventListener('deviceorientation', REC.phone_moves_updater, true);
-	REC.beat_holder = setInterval(REC.beat, 70);
+	REC.beat_holder = setInterval(REC.beat, 16); //16*256= 4096 approx. 4 seconds of recording
 };
 
 REC.phone_moves_updater = function(event) {

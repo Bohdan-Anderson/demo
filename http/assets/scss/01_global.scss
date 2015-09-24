@@ -57,7 +57,7 @@ button{
 }
 
 h1,h2,h3{
-	text-transform: uppercase;
+	//text-transform: uppercase;
 }
 
 .center_w_table{
@@ -96,9 +96,13 @@ h1,h2,h3{
 			display: inline-table;
 			a{
 				display: table-cell;
-				padding: 3rem;
+				padding: 2rem;
 				vertical-align: middle;
 			}
+		}
+		img{
+			width: 4em;
+			height: auto;
 		}
 	}
 
@@ -130,6 +134,22 @@ h1,h2,h3{
 	}
 
 
+//Global
+.help {
+	background-color: #444;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 2em;
+    height: 2em;
+    border: 1px solid #fff;
+}
 
+.hidden {
+	display: none;
+}
 
+#debug_text {
+	//display: none;
+}
 
