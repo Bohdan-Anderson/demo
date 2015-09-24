@@ -13,12 +13,19 @@ var GAME = {
 
 // PREAMBLE
 GAME.phase1 = {
+	first: true,
 	init: function() {
 		$(document.body).removeClass().addClass("phase1");
-		$("#user_to_phase2").click(GAME.phase1.next_phase);
+		if (GAME.phase1.first) {
+			$("#user_to_phase2").click(GAME.phase1.next_phase);
+			GAME.phase1.first = false;
+		}
 	},
 	next_phase: function(event) {
 		event.preventDefault();
+		if (APP.fullscreen && screenfull.enabled) {
+			screenfull.request();
+		}
 		if (screenfull.enabled && GAME.fullscreen == true) {
 			screenfull.request();
 		}
@@ -29,9 +36,13 @@ GAME.phase1 = {
 
 // Element Type
 GAME.phase2 = {
+	first: true,
 	init: function() {
 		$(document.body).removeClass().addClass("phase2");
-		$("#user_choose_type a").click(GAME.phase2.set_type);
+		if (GAME.phase2.first) {
+			GAME.phase2.first = false;
+			$("#user_choose_type a").click(GAME.phase2.set_type);
+		}
 	},
 	set_type: function(event) {
 		event.preventDefault();
@@ -76,11 +87,15 @@ GAME.phase4 = {
 }
 
 GAME.phase5 = {
+	first: true,
 	init: function(elements) {
 		$(document.body).removeClass().addClass("phase5 ");
 		console.log(elements);
 		$("#pairing_success").html(elements);
-		$("#paired_keep_playing").click(GAME.phase5.keep_playing);
+		if (GAME.phase5.first) {
+			GAME.phase5.first = false;
+			$("#paired_keep_playing").click(GAME.phase5.keep_playing);
+		}
 	},
 	keep_playing: function(event) {
 		event.preventDefault();

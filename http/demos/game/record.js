@@ -63,7 +63,7 @@ REC.stop = function() {
 
 	var to_send = {
 		"standard_deviation": CALC.standard_deviation(REC.raw),
-		"slope_aggresion": CALC.slope_aggresion(REC.raw),
+		"slope_aggression": CALC.slope_aggresion(REC.raw),
 		"sum": CALC.sum(REC.raw),
 		"raw": REC.raw,
 		"element": Cookies.get("element")
