@@ -1,5 +1,9 @@
+// TODO figure out better way of determing interval
+// https://developer.mozilla.org/en-US/docs/Web/API/DeviceMotionEvent/interval
+
+
 var REC = {
-	ec: 80, //enc count
+	ec: 256, //enc count
 	temp: null,
 	zero: null,
 	raw: null
@@ -14,7 +18,7 @@ REC.start = function() {
 	REC.raw = null;
 	console.log("start recording");
 	window.addEventListener('deviceorientation', REC.phone_moves_updater, true);
-	REC.beat_holder = setInterval(REC.beat, 70);
+	REC.beat_holder = setInterval(REC.beat, 16);
 };
 
 REC.phone_moves_updater = function(event) {

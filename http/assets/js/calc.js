@@ -1,4 +1,8 @@
-var CALC = {};
+var CALC = {
+	af: 0,
+	bf: 0,
+	gf: 0
+};
 
 
 
@@ -8,7 +12,12 @@ CALC.zero_data = function(points, zero_data) {
 	var a = (Math.PI / 180) * (zero_data[0] - points[0]), //alpha: [0,360]
 		b = (Math.PI / 180) * (zero_data[1] - CALC.zero_data_map(points[1], -180, 180, 0, 360)), //beta: [-180,180]
 		g = (Math.PI / 180) * (zero_data[2] - CALC.zero_data_map(points[2], -90, 90, 0, 360)); //gamma: [-90,90]
-	return [Math.sin(a), Math.sin(b), Math.sin(g)];
+
+	CALC.af = (a * 0.09) + (af * (1 - 0.09));
+	CALC.bf = (b * 0.09) + (bf * (1 - 0.09));
+	CALC.gf = (g * 0.09) + (gf * (1 - 0.09));
+
+	return [Math.sin(CALC.af), Math.sin(CALC.bf), Math.sin(CALC.gf)];
 }
 CALC.zero_data_map = function(val, l1, h1, l2, h2) {
 	return l2 + (h2 - l2) * (val - l1) / (h1 - l1);
