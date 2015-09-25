@@ -82,7 +82,7 @@ answer wait > times out
 PAIR.OUT.joining_queue = function(event) {
 	console.log("joining queue");
 	APP.pr("tapped!");
-	PAIR.socket.emit("join queue", PAIR.D)
+	PAIR.socket.emit("join queue", "PAIR.D")
 	REC.start();
 	GAME.phase4.init();
 	if (APP.fullscreen && screenfull.enabled) {

@@ -61,7 +61,7 @@ CALC.slope_aggression = function(main, list, min_variance, weight) {
 		temp = null,
 		min_variance = min_variance;
 	for (var a = 0; a < length; a++) {
-		if (list[a].has_been_sent_win_message) {
+		if (list[a].has_been_sent_win_message || !list[a].possible_pairs.user_data) {
 			continue;
 		}
 		cd = list[a].possible_pairs.user_data.slope_aggression;
@@ -87,28 +87,47 @@ CALC.sum = function(main, list, min_variance, weight) {
 		return null;
 	}
 	console.log("\nSUM");
-	var winner = null,
+	var winner_a = null,
+		winner_b = null,
+		winner_g = null,
 		length = list.length,
 		ud = main.user_data.sum,
 		cd = null, //current data
-		temp = null,
-		min_variance = min_variance;
+		t_a = 0,
+		t_b = 0,
+		t_g = 0,
+		min_a = min_variance,
+		min_b = min_variance,
+		min_g = min_variance;
 	for (var a = 0; a < length; a++) {
-		if (list[a].has_been_sent_win_message) {
+		if (list[a].has_been_sent_win_message || !list[a].possible_pairs.user_data) {
 			continue;
 		}
 		cd = list[a].possible_pairs.user_data.sum;
-		temp = Math.abs(ud[0] - cd[0]);
-		temp += Math.abs(ud[1] - cd[1]);
-		temp += Math.abs(ud[2] - cd[2]);
-		console.log(temp);
-		if (temp < min_variance) {
-			min_variance = temp;
-			winner = list[a];
+		t_a = Math.abs(ud[0] - cd[0]);
+		t_b = Math.abs(ud[1] - cd[1]);
+		t_g = Math.abs(ud[2] - cd[2]);
+
+		if (t_a < min_a) {
+			console.log(t_a)
+			min_a = t_a;
+			winner_a = list[a];
+		}
+		if (t_b < min_b) {
+			console.log(t_b)
+			min_b = t_b;
+			winner_b = list[a];
+		}
+		if (t_g < min_g) {
+			console.log(t_g)
+			min_g = t_g;
+			winner_g = list[a];
 		}
 	}
-	CALC.add_weight(winner, main.this_socket.id, weight)
-	return winner;
+	CALC.add_weight(winner_a, main.this_socket.id, weight / 3)
+	CALC.add_weight(winner_b, main.this_socket.id, weight / 3)
+	CALC.add_weight(winner_g, main.this_socket.id, weight / 3)
+	return winner_a;
 }
 
 
@@ -143,6 +162,28 @@ CALC.greatest_weighed = function(list, id, total) {
 	return null;
 }
 
+
+// >> list of devices
+// if device has no data
+// add this socket to the device's possible pairs
+CALC.add_no_data = function(list, current_socket) {
+	if (typeof(list) !== "object" && !list.length) {
+		console.log("\n\nA list was not passed to SUM\n\n");
+		return null;
+	}
+	if (!list || list.length <= 0) {
+		return null;
+	}
+
+	var length = list.length;
+	for (var a = 0; a < length; a++) {
+		if (!list[a].possible_pairs.user_data) {
+			list[a].possible_pairs.pairs.push(current_socket);
+		}
+	}
+
+
+}
 
 
 exports.CALC = CALC;

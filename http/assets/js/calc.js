@@ -13,9 +13,9 @@ CALC.zero_data = function(points, zero_data) {
 		b = (Math.PI / 180) * (zero_data[1] - CALC.zero_data_map(points[1], -180, 180, 0, 360)), //beta: [-180,180]
 		g = (Math.PI / 180) * (zero_data[2] - CALC.zero_data_map(points[2], -90, 90, 0, 360)); //gamma: [-90,90]
 
-	CALC.af = (a * 0.09) + (af * (1 - 0.09));
-	CALC.bf = (b * 0.09) + (bf * (1 - 0.09));
-	CALC.gf = (g * 0.09) + (gf * (1 - 0.09));
+	CALC.af = (a * 0.09) + (CALC.af * (1 - 0.09));
+	CALC.bf = (b * 0.09) + (CALC.bf * (1 - 0.09));
+	CALC.gf = (g * 0.09) + (CALC.gf * (1 - 0.09));
 
 	return [Math.sin(CALC.af), Math.sin(CALC.bf), Math.sin(CALC.gf)];
 }

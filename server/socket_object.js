@@ -46,6 +46,9 @@ var OBJ = function(main_socket) {
 			}
 
 			for (var a = 0, max = out.pairs.length; a < max; ++a) {
+				if (!out.pairs[a].possible_pairs.user_data) {
+					continue;
+				};
 				cd = out.pairs[a].possible_pairs.user_data;
 				msg += cd.id + "<br>";
 			}
@@ -64,11 +67,13 @@ var OBJ = function(main_socket) {
 		},
 		find_matches: function() {
 			var ud = out.user_data, // user data
-				cd = null, //current data
-				// (compaired against, list of the pairs, minimun for winner, weight)
-				std_winner = CALC.standard_deviation(out, out.pairs, 0.5, 1),
-				agr_winner = CALC.slope_aggression(out, out.pairs, 0.4, 1),
-				sum_winner = CALC.sum(out, out.pairs, 50, 2);
+				cd = null; //current data
+			// (compaired against, list of the pairs, minimun for winner, weight)
+
+			CALC.add_no_data(out.this_socket, out.pairs);
+			std_winner = CALC.standard_deviation(out, out.pairs, 0.5, 1),
+			agr_winner = CALC.slope_aggression(out, out.pairs, 0.4, 1),
+			sum_winner = CALC.sum(out, out.pairs, 50, 2);
 
 			console.log("\n\nWinner...");
 
